@@ -60,6 +60,9 @@ func BridgeMainThread() {
 
 func ReturnCurrentModule() modules.Module {
 	if len(BridgeData.LoadedModules) > 0 {
+		if BridgeData.CurrentModule > len(BridgeData.LoadedModules)-1 {
+			BridgeData.CurrentModule = 0
+		}
 		switch BridgeData.LoadedModules[BridgeData.CurrentModule] {
 		case constants.ClockModuleID:
 			return clock.ClockModule
