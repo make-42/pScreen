@@ -1,0 +1,4 @@
+screen_pcb_size = [38,12,13.3]; //mm (+- 0.2) 13.3mm are pin headers.
+active_screen_area = [22.38,5.58,2.6]; //mm
+active_screen_area_offset_from_corner = [7.11,3.46]; //mm [38.00-(7.51+(24.38-22.38)/2+22.38),12-(1.96+(7.58-5.58)/2+5.58)]
+screen_rounding_radius = 0.5; //mm
