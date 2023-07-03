@@ -54,6 +54,8 @@ func LoadLanguageStrings(languageString string) {
 	switch languageString {
 	case "en_US":
 		I18n = en_US
+	case "fr_FR":
+		I18n = fr_FR
 	default:
 		I18n = en_US
 	}
@@ -75,6 +77,26 @@ var en_US = LanguageStrings{
 		BridgeSettingsKeybind: "b: bridge settings",
 		EscKeybind:            "esc: back",
 		ExitKeybind:           "q: quit",
+	},
+	CatchAll: "Err;i18n",
+}
+
+var fr_FR = LanguageStrings{
+	Headers: HeaderStrings{
+		MainPageHeader:           "Configuration",
+		AddModulePageHeader:      "Ajouter un module",
+		BridgeSettingsPageHeader: "Réglages du pont",
+	},
+	Modules: ModuleStrings{ClockModule: "Horloge", MediaModule: "Média", ScreensaverModule: "Économiseur d'écran", WeatherModule: "Météo"},
+	Keybinds: KeybindStrings{
+		NavigateKeybind:       "j/k, haut/bas: sélectionner",
+		AddModuleKeybind:      "a: ajouter un module",
+		RemoveModuleKeybind:   "r: supprimer le module",
+		StartXMitKeybind:      "s: démarrer xmition",
+		SelectKeybind:         "entrée/espace: sélectionner",
+		BridgeSettingsKeybind: "b: réglages du pont",
+		EscKeybind:            "esc: arrière",
+		ExitKeybind:           "q: quitter",
 	},
 	CatchAll: "Err;i18n",
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"pscreenapp/bridge"
 	"pscreenapp/bridge/renderer"
+	"pscreenapp/config"
 	"pscreenapp/i18n"
 	"pscreenapp/ui"
 	"pscreenapp/utils"
@@ -11,7 +12,7 @@ import (
 )
 
 func main() {
-	i18n.LoadLanguageStrings("en_US")
+	i18n.LoadLanguageStrings(config.I18nLanguage)
 	renderer.LoadRendererSharedRessources()
 	go bridge.BridgeMainThread()
 	model := ui.InitialModel()
