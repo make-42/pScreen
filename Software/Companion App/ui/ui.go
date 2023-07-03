@@ -15,23 +15,18 @@ import (
 )
 
 type Model struct {
-	currentPage         int
-	loadedModules       []int
-	delayBetweenModules int
-	cursor              int
+	currentPage int
+	cursor      int
 }
 
 func InitialModel() Model {
 	return Model{
-		currentPage:         constants.MainPageID,
-		loadedModules:       []int{},
-		delayBetweenModules: config.DelayBetweenModules,
-		cursor:              0,
+		currentPage: constants.MainPageID,
+		cursor:      0,
 	}
 }
 
 func (m Model) Init() tea.Cmd {
-	SyncBridgeDataFromUI(m)
 	return tickCmd()
 }
 
@@ -43,9 +38,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		var navItems int
 		switch m.currentPage {
 		case constants.MainPageID:
-			navItems = len(m.loadedModules)
+			navItems = len(bridge.BridgeData.LoadedModules)
 		case constants.AddModulePageID:
 			navItems = len(constants.AllModules)
+		case constants.BridgeSettingsPageID:
+			navItems = len(bridge.BridgeData.DetectedPorts)
 		}
 		// Cool, what was the actual key pressed?
 		switch msg.String() {
@@ -76,27 +73,48 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// The "r" key removes a module
 		case "r":
 			if m.currentPage == constants.MainPageID {
-				if len(m.loadedModules) > 0 {
-					m.loadedModules = utils.DeleteItem(m.loadedModules, m.cursor)
-					SyncBridgeDataFromUI(m)
+				if len(bridge.BridgeData.LoadedModules) > 0 {
+					bridge.BridgeData.LoadedModules = utils.DeleteItem(bridge.BridgeData.LoadedModules, m.cursor)
 					if m.cursor > 0 {
 						m.cursor--
 					}
 				}
 			}
 
+		// The "s" key starts communication with the device
+		case "s":
+			if m.currentPage == constants.MainPageID {
+				if !bridge.BridgeData.CommsReady {
+					bridge.BridgeStartXMit()
+				}
+			}
+
+		// The "b" opens bridge settings page
+		case "b":
+			if m.currentPage == constants.MainPageID {
+				m.cursor = 0
+				m.currentPage = constants.BridgeSettingsPageID
+				bridge.BridgeEnumSerialDevices()
+			}
+
 		// The "enter" and "space" keys select an item
-		case "enter", "space":
-			if m.currentPage == constants.AddModulePageID {
-				m.loadedModules = append(m.loadedModules, constants.AllModules[m.cursor])
-				SyncBridgeDataFromUI(m)
+		case "enter", " ":
+			switch m.currentPage {
+			case constants.AddModulePageID:
+				bridge.BridgeData.LoadedModules = append(bridge.BridgeData.LoadedModules, constants.AllModules[m.cursor])
 				m.currentPage = constants.MainPageID
 				m.cursor = 0
+			case constants.BridgeSettingsPageID:
+				if len(bridge.BridgeData.DetectedPorts) > 0 {
+					config.SerialPortToUse = bridge.BridgeData.DetectedPorts[m.cursor].Name
+					m.currentPage = constants.MainPageID
+					m.cursor = 0
+				}
 			}
 
 		// The "esc" key leave a menu
 		case "esc":
-			if m.currentPage == constants.AddModulePageID {
+			if m.currentPage != constants.MainPageID {
 				m.currentPage = constants.MainPageID
 				m.cursor = 0
 			}
@@ -110,11 +128,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func SyncBridgeDataFromUI(m Model) {
-	bridge.BridgeData.LoadedModules = m.loadedModules
-	bridge.BridgeData.DelayBetweenModules = m.delayBetweenModules
-}
-
 func (m Model) View() string {
 	s := "\n"
 	s += components.Header(components.VersionNumber())
@@ -126,7 +139,7 @@ func (m Model) View() string {
 		s += components.Header(i18n.I18n.Headers.MainPageHeader) + "\n\n"
 
 		// Iterate over our modules
-		for i, moduleID := range m.loadedModules {
+		for i, moduleID := range bridge.BridgeData.LoadedModules {
 
 			// Is the cursor pointing at this module?
 			cursor := " " // no cursor
@@ -142,7 +155,7 @@ func (m Model) View() string {
 			// Render the row
 			s += styling.Indent(fmt.Sprintf("%s %s %s\n", shownOnScreen, cursor, i18n.ModuleIDToString(moduleID)), config.PaddingIndentAmount)
 		}
-		keybinds = append(keybinds, i18n.I18n.Keybinds.AddModuleKeybind, i18n.I18n.Keybinds.RemoveModuleKeybind)
+		keybinds = append(keybinds, i18n.I18n.Keybinds.AddModuleKeybind, i18n.I18n.Keybinds.RemoveModuleKeybind, i18n.I18n.Keybinds.StartXMitKeybind, i18n.I18n.Keybinds.BridgeSettingsKeybind)
 
 	case constants.AddModulePageID:
 		// The header
@@ -159,6 +172,27 @@ func (m Model) View() string {
 
 			// Render the row
 			s += styling.Indent(fmt.Sprintf("%s %s\n", cursor, i18n.ModuleIDToString(moduleID)), config.PaddingIndentAmount)
+		}
+		keybinds = append(keybinds, i18n.I18n.Keybinds.SelectKeybind, i18n.I18n.Keybinds.EscKeybind)
+
+	case constants.BridgeSettingsPageID:
+		// The header
+		s += components.Header(i18n.I18n.Headers.BridgeSettingsPageHeader) + "\n\n"
+
+		// Iterate over our modules
+		for i, port := range bridge.BridgeData.DetectedPorts {
+
+			// Is the cursor pointing at this module?
+			cursor := " " // no cursor
+			if m.cursor == i {
+				cursor = styling.ColorFg(">", styling.HighlightedColor) // cursor!
+			}
+			portName := port.Name
+			if config.SerialPortToUse == portName {
+				portName = styling.Bold(portName)
+			}
+			// Render the row
+			s += styling.Indent(fmt.Sprintf("%s %-10s %10s %10s \n", cursor, portName, port.VID, port.SerialNumber), config.PaddingIndentAmount)
 		}
 		keybinds = append(keybinds, i18n.I18n.Keybinds.SelectKeybind, i18n.I18n.Keybinds.EscKeybind)
 

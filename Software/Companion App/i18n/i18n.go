@@ -25,17 +25,20 @@ func ModuleIDToString(moduleID int) string {
 }
 
 type HeaderStrings struct {
-	MainPageHeader      string
-	AddModulePageHeader string
+	MainPageHeader           string
+	AddModulePageHeader      string
+	BridgeSettingsPageHeader string
 }
 
 type KeybindStrings struct {
-	NavigateKeybind     string
-	AddModuleKeybind    string
-	RemoveModuleKeybind string
-	SelectKeybind       string
-	EscKeybind          string
-	ExitKeybind         string
+	NavigateKeybind       string
+	AddModuleKeybind      string
+	RemoveModuleKeybind   string
+	StartXMitKeybind      string
+	SelectKeybind         string
+	BridgeSettingsKeybind string
+	EscKeybind            string
+	ExitKeybind           string
 }
 
 type LanguageStrings struct {
@@ -58,17 +61,20 @@ func LoadLanguageStrings(languageString string) {
 
 var en_US = LanguageStrings{
 	Headers: HeaderStrings{
-		MainPageHeader:      "Configuration",
-		AddModulePageHeader: "Add module",
+		MainPageHeader:           "Configuration",
+		AddModulePageHeader:      "Add module",
+		BridgeSettingsPageHeader: "Bridge settings",
 	},
 	Modules: ModuleStrings{ClockModule: "Clock", MediaModule: "Media", ScreensaverModule: "Screensaver", WeatherModule: "Weather"},
 	Keybinds: KeybindStrings{
-		NavigateKeybind:     "j/k, up/down: select",
-		AddModuleKeybind:    "a: add module",
-		RemoveModuleKeybind: "r: remove module",
-		SelectKeybind:       "enter/space: select",
-		EscKeybind:          "esc: back",
-		ExitKeybind:         "q: quit",
+		NavigateKeybind:       "j/k, up/down: select",
+		AddModuleKeybind:      "a: add module",
+		RemoveModuleKeybind:   "r: remove module",
+		StartXMitKeybind:      "s: start xmit",
+		SelectKeybind:         "enter/space: select",
+		BridgeSettingsKeybind: "b: bridge settings",
+		EscKeybind:            "esc: back",
+		ExitKeybind:           "q: quit",
 	},
 	CatchAll: "Err;i18n",
 }

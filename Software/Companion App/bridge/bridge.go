@@ -10,9 +10,11 @@ import (
 	"pscreenapp/bridge/renderer"
 	"pscreenapp/config"
 	"pscreenapp/constants"
+	"pscreenapp/utils"
 	"time"
 
 	"go.bug.st/serial"
+	"go.bug.st/serial/enumerator"
 )
 
 type bridgeData struct {
@@ -20,6 +22,7 @@ type bridgeData struct {
 	DelayBetweenModules int
 	ModuleDisplayStart  int64
 	CurrentModule       int
+	DetectedPorts       []*enumerator.PortDetails
 	CommsReady          bool
 }
 
@@ -29,6 +32,12 @@ var Port serial.Port
 func BridgeStartXMit() {
 	Port = comms.EstablishComms()
 	BridgeData.CommsReady = true
+}
+
+func BridgeEnumSerialDevices() {
+	var err error
+	BridgeData.DetectedPorts, err = enumerator.GetDetailedPortsList()
+	utils.CheckError(err)
 }
 
 func BridgeMainThread() {

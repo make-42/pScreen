@@ -14,4 +14,5 @@ var AllModules = []int{
 const (
 	MainPageID = iota
 	AddModulePageID
+	BridgeSettingsPageID
 )
