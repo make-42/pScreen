@@ -14,7 +14,7 @@ pico_sdk_init()
 # rest of your project
 
 add_executable(pscreen
-	main.c
+	main.c pico-ssd1306/ssd1306.c
 )
 
 target_include_directories(pscreen
@@ -22,7 +22,7 @@ target_include_directories(pscreen
         ${CMAKE_CURRENT_LIST_DIR}/../
 )
 
-target_link_libraries(pscreen pico_stdlib)
+target_link_libraries(pscreen pico_stdlib hardware_i2c)
 
 pico_enable_stdio_usb(pscreen 1)
 pico_enable_stdio_uart(pscreen 0)
