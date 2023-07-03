@@ -31,6 +31,7 @@ func InitialModel() Model {
 }
 
 func (m Model) Init() tea.Cmd {
+	SyncBridgeDataFromUI(m)
 	return tickCmd()
 }
 
@@ -77,6 +78,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.currentPage == constants.MainPageID {
 				if len(m.loadedModules) > 0 {
 					m.loadedModules = utils.DeleteItem(m.loadedModules, m.cursor)
+					SyncBridgeDataFromUI(m)
 					if m.cursor > 0 {
 						m.cursor--
 					}
@@ -87,18 +89,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter", "space":
 			if m.currentPage == constants.AddModulePageID {
 				m.loadedModules = append(m.loadedModules, constants.AllModules[m.cursor])
+				SyncBridgeDataFromUI(m)
 				m.currentPage = constants.MainPageID
 				m.cursor = 0
 			}
 
-			// The "esc" key leave a menu
+		// The "esc" key leave a menu
 		case "esc":
 			if m.currentPage == constants.AddModulePageID {
 				m.currentPage = constants.MainPageID
 				m.cursor = 0
 			}
 		}
-		SyncBridgeDataFromUI(m)
 	case tickMsg:
 		return m, tickCmd()
 	}
