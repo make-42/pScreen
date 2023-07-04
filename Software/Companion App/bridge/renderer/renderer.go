@@ -18,6 +18,8 @@ import (
 
 var BigFont font.Face
 var MediumFont font.Face
+var SmallFont font.Face
+var TinyFont font.Face
 var BackgroundImage image.Image
 
 func LoadRendererSharedRessources() {
@@ -25,6 +27,10 @@ func LoadRendererSharedRessources() {
 	BigFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 40)
 	utils.CheckError(err)
 	MediumFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 30)
+	utils.CheckError(err)
+	SmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 16)
+	utils.CheckError(err)
+	TinyFont, err = gg.LoadFontFace("./assets/fonts/Lato-Bold.ttf", 12)
 	utils.CheckError(err)
 	imgFile, err := os.Open("./assets/img/bg.png")
 	defer imgFile.Close()
@@ -70,4 +76,11 @@ func CompositeBackgroundAndForeground(bgImg *image.RGBA, fgImg *image.RGBA) *ima
 		}
 	}
 	return bgImg
+}
+
+func AddWallpaperToFrame(fgImg *image.RGBA) *image.RGBA {
+	b := fgImg.Bounds()
+	m := image.NewRGBA(image.Rect(0, 0, b.Dx(), b.Dy()))
+	draw.Draw(m, m.Bounds(), BackgroundImage.(*image.RGBA), b.Min, draw.Src)
+	return CompositeBackgroundAndForeground(m, fgImg)
 }

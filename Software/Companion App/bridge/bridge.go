@@ -5,6 +5,7 @@ import (
 	"pscreenapp/bridge/modules"
 	"pscreenapp/bridge/modules/clock"
 	"pscreenapp/bridge/modules/media"
+	"pscreenapp/bridge/modules/monitor"
 	"pscreenapp/bridge/modules/screensaver"
 	"pscreenapp/bridge/modules/weather"
 	"pscreenapp/bridge/renderer"
@@ -26,7 +27,7 @@ type bridgeData struct {
 	CommsReady          bool
 }
 
-var BridgeData = bridgeData{LoadedModules: []int{}, DelayBetweenModules: config.DelayBetweenModules, CommsReady: false}
+var BridgeData = bridgeData{LoadedModules: []int{constants.MonitorModuleID}, DelayBetweenModules: config.DelayBetweenModules, CommsReady: false}
 var Port serial.Port
 
 func BridgeStartXMit() {
@@ -68,6 +69,8 @@ func ReturnCurrentModule() modules.Module {
 			return clock.ClockModule
 		case constants.MediaModuleID:
 			return media.MediaModule
+		case constants.MonitorModuleID:
+			return monitor.MonitorModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
 		case constants.WeatherModuleID:

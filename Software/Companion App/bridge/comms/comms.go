@@ -23,7 +23,7 @@ func WaitForBoardUnblockSignal(port serial.Port) {
 	buff := make([]byte, 1)
 	_, err := port.Read(buff)
 	utils.CheckError(err)
-	//fmt.Printf("Received %v bytes\n", n)
+	// fmt.Printf("Received %v bytes\n", n)
 	BoardBlocked = false
 }
 
@@ -33,7 +33,7 @@ func SendBytes(port serial.Port, bytes []byte) {
 	}
 	_, err := port.Write(bytes)
 	utils.CheckError(err)
-	//fmt.Printf("Sent %v bytes\n", n)
+	// fmt.Printf("Sent %v bytes\n", n)
 	BoardBlocked = true
 	go WaitForBoardUnblockSignal(port)
 }
