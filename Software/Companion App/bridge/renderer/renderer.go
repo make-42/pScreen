@@ -18,6 +18,7 @@ import (
 
 var BigFont font.Face
 var MediumFont font.Face
+var MedSmallFont font.Face
 var SmallFont font.Face
 var TinyFont font.Face
 var BackgroundImage image.Image
@@ -27,6 +28,8 @@ func LoadRendererSharedRessources() {
 	BigFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 40)
 	utils.CheckError(err)
 	MediumFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 30)
+	utils.CheckError(err)
+	MedSmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 24)
 	utils.CheckError(err)
 	SmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 16)
 	utils.CheckError(err)
@@ -41,7 +44,7 @@ func LoadRendererSharedRessources() {
 
 func RenderFrame(mod modules.Module) []byte {
 	upLeft := image.Point{0, 0}
-	lowRight := image.Point{config.CanvasRenderDimensions[0], config.CanvasRenderDimensions[1]}
+	lowRight := image.Point{config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y}
 	im := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	im = mod.RenderFunction(im)
 	if config.DebugSaveScreen {

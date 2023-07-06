@@ -26,13 +26,13 @@ var WeatherModule modules.Module = modules.Module{RenderFunction: func(im *image
 	dc.SetRGB(1, 1, 1)
 	dc.SetFontFace(renderer.MediumFont)
 	dc.DrawStringAnchored(fmt.Sprintf("%0.1f°C", KelvinToCelsius(CurrentWeatherData.Main.Temp)), 4, -4, 0, 1)
-	dc.DrawStringAnchored(CurrentWeatherData.Weather[0].Main, float64(config.CanvasRenderDimensions[0]-4), -4, 1, 1)
+	dc.DrawStringAnchored(CurrentWeatherData.Weather[0].Main, float64(config.CanvasRenderDimensions.X-4), -4, 1, 1)
 	dc.SetFontFace(renderer.SmallFont)
 	dc.DrawStringAnchored(fmt.Sprintf("%0.1f  %0.1f", KelvinToCelsius(CurrentWeatherData.Main.TempMin), KelvinToCelsius(CurrentWeatherData.Main.TempMax)), 4, 26, 0, 1)
-	dc.DrawStringAnchored(fmt.Sprintf("%d hPa", CurrentWeatherData.Main.Pressure), float64(config.CanvasRenderDimensions[0]-4), 26, 1, 1)
-	dc.DrawStringAnchored(fmt.Sprintf("%d %%", CurrentWeatherData.Main.Humidity), 4, float64(config.CanvasRenderDimensions[1]-4), 0, 0)
-	dc.DrawStringAnchored(fmt.Sprintf("%0.1f m/s", CurrentWeatherData.Wind.Speed), float64(config.CanvasRenderDimensions[0]-4*2-config.WindIndicatorRadius*2), float64(config.CanvasRenderDimensions[1]-4), 1, 0)
-	windDirectionLogoCenter := [2]float64{float64(config.CanvasRenderDimensions[0] - 4 - config.WindIndicatorRadius), float64(config.CanvasRenderDimensions[1] - 4 - config.WindIndicatorRadius)}
+	dc.DrawStringAnchored(fmt.Sprintf("%d hPa", CurrentWeatherData.Main.Pressure), float64(config.CanvasRenderDimensions.X-4), 26, 1, 1)
+	dc.DrawStringAnchored(fmt.Sprintf("%d %%", CurrentWeatherData.Main.Humidity), 4, float64(config.CanvasRenderDimensions.Y-4), 0, 0)
+	dc.DrawStringAnchored(fmt.Sprintf("%0.1f m/s", CurrentWeatherData.Wind.Speed), float64(config.CanvasRenderDimensions.X-4*2-config.WindIndicatorRadius*2), float64(config.CanvasRenderDimensions.Y-4), 1, 0)
+	windDirectionLogoCenter := [2]float64{float64(config.CanvasRenderDimensions.X - 4 - config.WindIndicatorRadius), float64(config.CanvasRenderDimensions.Y - 4 - config.WindIndicatorRadius)}
 	radWindDir := float64(CurrentWeatherData.Wind.Deg) / 180 * math.Pi
 	windDirectionWindEnd := [2]float64{windDirectionLogoCenter[0] + math.Sin(radWindDir)*config.WindIndicatorRadius, windDirectionLogoCenter[1] - math.Cos(radWindDir)*config.WindIndicatorRadius}
 	dc.SetLineWidth(0.5)

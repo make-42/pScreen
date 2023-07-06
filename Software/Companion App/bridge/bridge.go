@@ -27,7 +27,7 @@ type bridgeData struct {
 	CommsReady          bool
 }
 
-var BridgeData = bridgeData{LoadedModules: []int{constants.MonitorModuleID}, DelayBetweenModules: config.DelayBetweenModules, CommsReady: false}
+var BridgeData = bridgeData{LoadedModules: []int{constants.MediaModuleID}, DelayBetweenModules: config.DelayBetweenModules, CommsReady: false}
 var Port serial.Port
 
 func BridgeStartXMit() {
