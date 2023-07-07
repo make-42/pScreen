@@ -3,6 +3,7 @@ package bridge
 import (
 	"pscreenapp/bridge/comms"
 	"pscreenapp/bridge/modules"
+	"pscreenapp/bridge/modules/blank"
 	"pscreenapp/bridge/modules/clock"
 	"pscreenapp/bridge/modules/media"
 	"pscreenapp/bridge/modules/monitor"
@@ -65,6 +66,8 @@ func ReturnCurrentModule() modules.Module {
 			BridgeData.CurrentModule = 0
 		}
 		switch BridgeData.LoadedModules[BridgeData.CurrentModule] {
+		case constants.BlankModuleID:
+			return blank.BlankModule
 		case constants.ClockModuleID:
 			return clock.ClockModule
 		case constants.MediaModuleID:

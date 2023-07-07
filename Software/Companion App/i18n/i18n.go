@@ -3,6 +3,7 @@ package i18n
 import "pscreenapp/constants"
 
 type ModuleStrings struct {
+	BlankModule       string
 	ClockModule       string
 	MediaModule       string
 	MonitorModule     string
@@ -12,6 +13,8 @@ type ModuleStrings struct {
 
 func ModuleIDToString(moduleID int) string {
 	switch moduleID {
+	case constants.BlankModuleID:
+		return I18n.Modules.BlankModule
 	case constants.ClockModuleID:
 		return I18n.Modules.ClockModule
 	case constants.MediaModuleID:
@@ -70,7 +73,7 @@ var en_US = LanguageStrings{
 		AddModulePageHeader:      "Add module",
 		BridgeSettingsPageHeader: "Bridge settings",
 	},
-	Modules: ModuleStrings{ClockModule: "Clock", MediaModule: "Media", MonitorModule: "Monitor", ScreensaverModule: "Screensaver", WeatherModule: "Weather"},
+	Modules: ModuleStrings{BlankModule: "Blank", ClockModule: "Clock", MediaModule: "Media", MonitorModule: "Monitor", ScreensaverModule: "Screensaver", WeatherModule: "Weather"},
 	Keybinds: KeybindStrings{
 		NavigateKeybind:       "j/k, up/down: select",
 		AddModuleKeybind:      "a: add module",
@@ -90,7 +93,7 @@ var fr_FR = LanguageStrings{
 		AddModulePageHeader:      "Ajouter un module",
 		BridgeSettingsPageHeader: "Réglages du pont",
 	},
-	Modules: ModuleStrings{ClockModule: "Horloge", MediaModule: "Média", MonitorModule: "Moniteur", ScreensaverModule: "Économiseur d'écran", WeatherModule: "Météo"},
+	Modules: ModuleStrings{BlankModule: "Vide", ClockModule: "Horloge", MediaModule: "Média", MonitorModule: "Moniteur", ScreensaverModule: "Économiseur d'écran", WeatherModule: "Météo"},
 	Keybinds: KeybindStrings{
 		NavigateKeybind:       "j/k, haut/bas: sélectionner",
 		AddModuleKeybind:      "a: ajouter un module",
