@@ -3,12 +3,12 @@ package comms
 import (
 	"pscreenapp/config"
 	"pscreenapp/utils"
-	"time"
 
 	"go.bug.st/serial"
 )
 
-var BoardBlocked = false
+var BoardBlocked chan bool = make(chan bool, 10)
+var FirstFrame = true
 
 func EstablishComms() serial.Port {
 	mode := &serial.Mode{
@@ -24,16 +24,17 @@ func WaitForBoardUnblockSignal(port serial.Port) {
 	_, err := port.Read(buff)
 	utils.CheckError(err)
 	// fmt.Printf("Received %v bytes\n", n)
-	BoardBlocked = false
+	BoardBlocked <- false
 }
 
 func SendBytes(port serial.Port, bytes []byte) {
-	for BoardBlocked {
-		time.Sleep(time.Millisecond * config.DeviceBlockUpdateEveryXMilliseconds)
+	if FirstFrame {
+		FirstFrame = false
+	} else {
+		<-BoardBlocked
 	}
 	_, err := port.Write(bytes)
 	utils.CheckError(err)
 	// fmt.Printf("Sent %v bytes\n", n)
-	BoardBlocked = true
 	go WaitForBoardUnblockSignal(port)
 }

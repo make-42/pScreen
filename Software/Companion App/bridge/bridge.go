@@ -7,12 +7,14 @@ import (
 	"pscreenapp/bridge/modules/clock"
 	"pscreenapp/bridge/modules/media"
 	"pscreenapp/bridge/modules/monitor"
+	"pscreenapp/bridge/modules/notifications"
 	"pscreenapp/bridge/modules/screensaver"
 	"pscreenapp/bridge/modules/weather"
 	"pscreenapp/bridge/renderer"
 	"pscreenapp/config"
 	"pscreenapp/constants"
 	"pscreenapp/utils"
+	"runtime"
 	"time"
 
 	"go.bug.st/serial"
@@ -43,6 +45,11 @@ func BridgeEnumSerialDevices() {
 }
 
 func BridgeMainThread() {
+	if runtime.GOOS == "linux" {
+		if (config.UseNotificationsModule) && (!notifications.CurrentModuleState.ReceivingNotifications) {
+			go notifications.ListenForNotifications()
+		}
+	}
 	for {
 		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(BridgeData.DelayBetweenModules)*1000 {
 			BridgeData.ModuleDisplayStart = time.Now().UTC().UnixMilli()
@@ -61,6 +68,9 @@ func BridgeMainThread() {
 }
 
 func ReturnCurrentModule() modules.Module {
+	if notifications.CurrentModuleState.DisplayingNotification {
+		return notifications.NotificationsModule
+	}
 	if len(BridgeData.LoadedModules) > 0 {
 		if BridgeData.CurrentModule > len(BridgeData.LoadedModules)-1 {
 			BridgeData.CurrentModule = 0

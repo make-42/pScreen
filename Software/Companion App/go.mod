@@ -4,11 +4,13 @@ go 1.18
 
 require (
 	github.com/charmbracelet/bubbletea v0.24.2
+	github.com/davecgh/go-spew v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/fogleman/gg v1.3.0
 	github.com/godbus/dbus v4.1.0+incompatible
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
+	github.com/make-42/go-notifications v0.3.0
 	github.com/muesli/termenv v0.15.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	go.bug.st/serial v1.5.0
@@ -20,7 +22,7 @@ require (
 	github.com/containerd/console v1.0.4-0.20230313162750-1ae8d489ac81 // indirect
 	github.com/creack/goselect v0.1.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/godbus/dbus/v5 v5.0.6 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect

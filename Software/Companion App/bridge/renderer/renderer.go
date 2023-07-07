@@ -87,3 +87,7 @@ func AddWallpaperToFrame(fgImg *image.RGBA) *image.RGBA {
 	draw.Draw(m, m.Bounds(), BackgroundImage.(*image.RGBA), b.Min, draw.Src)
 	return CompositeBackgroundAndForeground(m, fgImg)
 }
+
+func InvertImage(img *image.RGBA) *image.RGBA {
+	return NRGBAImgToRGBAImg(imaging.Invert(img))
+}
