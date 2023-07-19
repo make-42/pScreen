@@ -3,7 +3,7 @@ include <asanoha.scad>
 
 // Start config
 // Panel Size
-panel_size = [ 104, 37 ]; // mm
+panel_size = [ 106, 39 ]; // mm
 // Pi Board
 pi_board_size = [ 51, 21 ];                                        // mm
 pi_board_screw_holes_center_from_board_edge_distance = [ 2, 4.8 ]; // mm
@@ -46,7 +46,7 @@ stand_asanoha_pattern_unit_length = 10.175; // mm
 stand_asanoha_repeat = [ 9, 3 ];
 
 // Misc
-walls_depth = 9.5;     // mm
+walls_depth = 13.5;    // mm
 walls_thickness = 1.5; // mm
 panel_thickness = 1.5; // mm
 rounding_radius = 1.5; // mm

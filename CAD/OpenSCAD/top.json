@@ -35,7 +35,7 @@
       "stand_panel_tolerance": "0.25",
       "stand_rounding_radius": "1.5",
       "stand_size": "[3, 6, 6]",
-      "walls_depth": "9.5",
+      "walls_depth": "13.5",
       "walls_thickness": "1.5"
     },
     "SSD1322": {
@@ -48,7 +48,7 @@
       "m2_screw_head_diameter": "4",
       "m2_screw_nut_depth": "1",
       "m2_screw_nut_diameter": "5",
-      "panel_size": "[104, 37]",
+      "panel_size": "[106, 39]",
       "panel_thickness": "1.5",
       "pi_board_offset": "[1.75, -1.0]",
       "pi_board_screw_holes_center_from_board_edge_distance": "[2, 4.8]",
@@ -73,7 +73,7 @@
       "stand_panel_tolerance": "0.25",
       "stand_rounding_radius": "1.5",
       "stand_size": "[3, 6, 6]",
-      "walls_depth": "9.5",
+      "walls_depth": "13.5",
       "walls_thickness": "1.5"
     }
   },
