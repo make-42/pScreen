@@ -4,3 +4,6 @@
 [submodule "Software/Firmware/pico-ssd1306"]
 	path = Software/Firmware/pico-ssd1306
 	url = https://github.com/daschr/pico-ssd1306
+[submodule "Software/Firmware/u8g2"]
+	path = Software/Firmware/u8g2
+	url = https://github.com/olikraus/u8g2
