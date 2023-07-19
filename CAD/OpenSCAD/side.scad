@@ -2,7 +2,7 @@ include <BOSL2/std.scad>
 
 // Start config
 // Panel Size
-panel_size = [ 106, 42 ]; // mm
+panel_size = [ 104, 37 ]; // mm
 // Pi Board
 pi_board_size = [ 51, 21 ];                                        // mm
 pi_board_screw_holes_center_from_board_edge_distance = [ 2, 4.8 ]; // mm
