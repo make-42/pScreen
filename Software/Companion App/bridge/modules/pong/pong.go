@@ -54,10 +54,16 @@ func updateState(state State, predictPaddleMovement bool, resetStateOnGameOver b
 				state.Paddles[i].PID.Update(pid.ControllerInput{
 					ReferenceSignal:  paddlePredictedY,
 					ActualSignal:     paddle.Position.Y,
-					SamplingInterval: 1000 * time.Millisecond,
+					SamplingInterval: 1000 * time.Millisecond * 4 / config.PongTimestepsPerFrame,
 				})
-				state.Paddles[i].Position.Y = state.Paddles[i].Position.Y + config.PongPaddleVelocity*state.Paddles[i].PID.State.ControlSignal
-				if utils.IsPointInRectangle(paddle.Position, config.PongPaddleWidth, config.PongPaddleLength, state.Ball.Position, config.PongBallRadius) {
+				state.Paddles[i].Position.Y = state.Paddles[i].Position.Y + 4/float64(config.PongTimestepsPerFrame)*config.PongPaddleVelocity*state.Paddles[i].PID.State.ControlSignal
+				var collisionPaddlePosition utils.CoordsFloat
+				if i == 0 {
+					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.PongPaddleInvisibleWidth - config.PongPaddleWidth/2, Y: paddle.Position.Y - config.PongPaddleLength/2}
+				} else {
+					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.PongPaddleWidth/2, Y: paddle.Position.Y - config.PongPaddleLength/2}
+				}
+				if utils.IsPointInRectangle(collisionPaddlePosition, config.PongPaddleWidth+config.PongPaddleInvisibleWidth, config.PongPaddleLength, state.Ball.Position, config.PongBallRadius) {
 					state.Ball.Velocity.X = -state.Ball.Velocity.X
 					state.Ball.Position.X = math.Max(math.Min(state.Ball.Position.X, float64(config.CanvasRenderDimensions.X)-config.PongPaddleDistFromEdge-config.PongPaddleWidth/2), config.PongPaddleDistFromEdge+config.PongPaddleWidth/2)
 				}
@@ -91,7 +97,8 @@ func updateState(state State, predictPaddleMovement bool, resetStateOnGameOver b
 }
 
 func resetState() State {
-	angle := utils.RandFloat64Around0() * 2 * math.Pi
+	//angle := utils.RandFloat64Around0() * 2 * math.Pi
+	angle := 2 * math.Pi / 360 * 40
 	return State{
 		Ball: Ball{
 			Position: utils.CoordsFloat{
@@ -99,8 +106,8 @@ func resetState() State {
 				Y: float64(config.CanvasRenderDimensions.Y) / 2,
 			},
 			Velocity: utils.CoordsFloat{
-				X: math.Cos(angle) * config.PongBallVelocity,
-				Y: -math.Sin(angle) * config.PongBallVelocity,
+				X: math.Cos(angle) * config.PongBallVelocity * 4 / float64(config.PongTimestepsPerFrame),
+				Y: -math.Sin(angle) * config.PongBallVelocity * 4 / float64(config.PongTimestepsPerFrame),
 			},
 		},
 		Paddles: [2]Paddle{
