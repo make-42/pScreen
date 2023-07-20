@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"log"
+	"math/rand"
 )
 
 func CheckError(err error) {
@@ -43,4 +44,34 @@ func FormatDuration(seconds float64) string {
 	minute := int(seconds/60) % 60
 	second := int(seconds) % 60
 	return fmt.Sprintf("%d:%02d:%02d", hour, minute, second)
+}
+
+func WrapString(str string, charactersOnLine int) string {
+	newString := ""
+	sinceNewLine := 0
+	for _, s := range str {
+		newString += string(s)
+		if string(s) == "\n" {
+			sinceNewLine = 0
+		}
+		if sinceNewLine >= charactersOnLine {
+			newString += "\n"
+			sinceNewLine = 0
+		}
+		if string(s) != "\n" && string(s) != "\r" {
+			sinceNewLine++
+		}
+	}
+	return newString
+}
+
+func RandFloat64Around0() float64 {
+	return (rand.Float64() - 0.5) * 2
+}
+
+func IsPointInRectangle(rectPos CoordsFloat, rectW, rectH float64, pointPos CoordsFloat, pointRadius float64) bool {
+	if pointPos.X > rectPos.X-pointRadius && pointPos.X < rectPos.X+rectW+pointRadius && pointPos.Y > rectPos.Y-pointRadius && pointPos.Y < rectPos.Y+rectH+pointRadius {
+		return true
+	}
+	return false
 }

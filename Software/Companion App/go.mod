@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/charmbracelet/bubbletea v0.24.2
-	github.com/davecgh/go-spew v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/fogleman/gg v1.3.0
 	github.com/godbus/dbus v4.1.0+incompatible
@@ -12,8 +11,10 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/make-42/go-notifications v0.3.0
 	github.com/muesli/termenv v0.15.1
+	github.com/pbnjay/pixfont v0.0.0-20200714042608-33b744692567
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	go.bug.st/serial v1.5.0
+	go.einride.tech/pid v0.1.1
 	golang.org/x/image v0.8.0
 )
 

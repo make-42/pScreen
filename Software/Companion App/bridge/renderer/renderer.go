@@ -10,9 +10,11 @@ import (
 	"pscreenapp/bridge/modules"
 	"pscreenapp/config"
 	"pscreenapp/utils"
+	"strings"
 
 	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
+	"github.com/pbnjay/pixfont"
 	"golang.org/x/image/font"
 )
 
@@ -97,4 +99,11 @@ func AddWallpaperToFrame(fgImg *image.RGBA) *image.RGBA {
 
 func InvertImage(img *image.RGBA) *image.RGBA {
 	return NRGBAImgToRGBAImg(imaging.Invert(img))
+}
+
+func MultiLinePixFont(img *image.RGBA, x, y, lineSep int, str string, col color.Color) {
+	lines := strings.Split(str, "\n")
+	for i, line := range lines {
+		pixfont.DrawString(img, x, y+i*lineSep, line, col)
+	}
 }

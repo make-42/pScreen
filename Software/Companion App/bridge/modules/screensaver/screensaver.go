@@ -37,7 +37,7 @@ func updateState(state State) State {
 
 	for i := 0; i < config.ScreensaverParticlesToSpawnEachTime; i++ {
 		if frontParticles < config.ScreensaverMaxParticles {
-			newParticles = append(newParticles, Particle{velocity: utils.CoordsFloat{X: (rand.Float64() - 0.5) * 2 * config.ScreensaverParticleSpeed.X, Y: (rand.Float64() - 0.5) * 2 * config.ScreensaverParticleSpeed.Y}, position: utils.CoordsFloat{X: rand.Float64() * float64(config.CanvasRenderDimensions.X), Y: rand.Float64() * float64(config.CanvasRenderDimensions.X)}, lifetime: config.ScreensaverParticleLifetime, front: true})
+			newParticles = append(newParticles, Particle{velocity: utils.CoordsFloat{X: utils.RandFloat64Around0() * config.ScreensaverParticleSpeed.X, Y: utils.RandFloat64Around0() * config.ScreensaverParticleSpeed.Y}, position: utils.CoordsFloat{X: rand.Float64() * float64(config.CanvasRenderDimensions.X), Y: rand.Float64() * float64(config.CanvasRenderDimensions.X)}, lifetime: config.ScreensaverParticleLifetime, front: true})
 			frontParticles++
 		}
 	}

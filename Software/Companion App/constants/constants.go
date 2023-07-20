@@ -5,12 +5,13 @@ const (
 	BlankModuleID
 	MediaModuleID
 	MonitorModuleID
+	PongModuleID
 	ScreensaverModuleID
 	WeatherModuleID
 )
 
 var AllModules = []int{
-	BlankModuleID, ClockModuleID, MediaModuleID, MonitorModuleID, ScreensaverModuleID, WeatherModuleID,
+	BlankModuleID, ClockModuleID, MediaModuleID, MonitorModuleID, PongModuleID, ScreensaverModuleID, WeatherModuleID,
 }
 
 const (

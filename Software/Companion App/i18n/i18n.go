@@ -7,6 +7,7 @@ type ModuleStrings struct {
 	ClockModule       string
 	MediaModule       string
 	MonitorModule     string
+	PongModule        string
 	ScreensaverModule string
 	WeatherModule     string
 }
@@ -21,6 +22,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.MediaModule
 	case constants.MonitorModuleID:
 		return I18n.Modules.MonitorModule
+	case constants.PongModuleID:
+		return I18n.Modules.PongModule
 	case constants.ScreensaverModuleID:
 		return I18n.Modules.ScreensaverModule
 	case constants.WeatherModuleID:
@@ -73,7 +76,14 @@ var en_US = LanguageStrings{
 		AddModulePageHeader:      "Add module",
 		BridgeSettingsPageHeader: "Bridge settings",
 	},
-	Modules: ModuleStrings{BlankModule: "Blank", ClockModule: "Clock", MediaModule: "Media", MonitorModule: "Monitor", ScreensaverModule: "Screensaver", WeatherModule: "Weather"},
+	Modules: ModuleStrings{BlankModule: "Blank",
+		ClockModule:       "Clock",
+		MediaModule:       "Media",
+		MonitorModule:     "Monitor",
+		PongModule:        "Pong",
+		ScreensaverModule: "Screensaver",
+		WeatherModule:     "Weather",
+	},
 	Keybinds: KeybindStrings{
 		NavigateKeybind:       "j/k, up/down: select",
 		AddModuleKeybind:      "a: add module",
@@ -93,7 +103,15 @@ var fr_FR = LanguageStrings{
 		AddModulePageHeader:      "Ajouter un module",
 		BridgeSettingsPageHeader: "Réglages du pont",
 	},
-	Modules: ModuleStrings{BlankModule: "Vide", ClockModule: "Horloge", MediaModule: "Média", MonitorModule: "Moniteur", ScreensaverModule: "Économiseur d'écran", WeatherModule: "Météo"},
+	Modules: ModuleStrings{
+		BlankModule:       "Vide",
+		ClockModule:       "Horloge",
+		MediaModule:       "Média",
+		MonitorModule:     "Moniteur",
+		PongModule:        "Pong",
+		ScreensaverModule: "Économiseur d'écran",
+		WeatherModule:     "Météo",
+	},
 	Keybinds: KeybindStrings{
 		NavigateKeybind:       "j/k, haut/bas: sélectionner",
 		AddModuleKeybind:      "a: ajouter un module",

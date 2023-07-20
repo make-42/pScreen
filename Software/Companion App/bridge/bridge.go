@@ -8,6 +8,7 @@ import (
 	"pscreenapp/bridge/modules/media"
 	"pscreenapp/bridge/modules/monitor"
 	"pscreenapp/bridge/modules/notifications"
+	"pscreenapp/bridge/modules/pong"
 	"pscreenapp/bridge/modules/screensaver"
 	"pscreenapp/bridge/modules/weather"
 	"pscreenapp/bridge/renderer"
@@ -84,6 +85,8 @@ func ReturnCurrentModule() modules.Module {
 			return media.MediaModule
 		case constants.MonitorModuleID:
 			return monitor.MonitorModule
+		case constants.PongModuleID:
+			return pong.PongModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
 		case constants.WeatherModuleID:
