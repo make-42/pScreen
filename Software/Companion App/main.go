@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"pscreenapp/bridge"
 	"pscreenapp/bridge/renderer"
 	"pscreenapp/config"
@@ -12,6 +13,7 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile)
 	i18n.LoadLanguageStrings(config.I18nLanguage)
 	renderer.LoadRendererSharedRessources()
 	go bridge.BridgeMainThread()

@@ -51,8 +51,15 @@ func RenderFrame(mod modules.Module) []byte {
 		f, _ := os.Create("image.png")
 		png.Encode(f, im)
 	}
+	if config.RotateScreen180Deg {
+		im = RotateImage180deg(im)
+	}
 	return encoder.EncodeFrameToBytes(im)
 
+}
+
+func RotateImage180deg(im *image.RGBA) *image.RGBA {
+	return NRGBAImgToRGBAImg(imaging.Rotate180(im))
 }
 
 func NRGBAImgToRGBAImg(im *image.NRGBA) *image.RGBA {

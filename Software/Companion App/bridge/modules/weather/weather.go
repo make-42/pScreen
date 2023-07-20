@@ -35,7 +35,7 @@ var WeatherModule modules.Module = modules.Module{RenderFunction: func(im *image
 	windDirectionLogoCenter := [2]float64{float64(config.CanvasRenderDimensions.X - 4 - config.WindIndicatorRadius), float64(config.CanvasRenderDimensions.Y - 4 - config.WindIndicatorRadius)}
 	radWindDir := float64(CurrentWeatherData.Wind.Deg) / 180 * math.Pi
 	windDirectionWindEnd := [2]float64{windDirectionLogoCenter[0] + math.Sin(radWindDir)*config.WindIndicatorRadius, windDirectionLogoCenter[1] - math.Cos(radWindDir)*config.WindIndicatorRadius}
-	dc.SetLineWidth(0.5)
+	dc.SetLineWidth(1)
 	dc.DrawLine(windDirectionLogoCenter[0], windDirectionLogoCenter[1], windDirectionWindEnd[0], windDirectionWindEnd[1])
 	dc.DrawCircle(windDirectionLogoCenter[0], windDirectionLogoCenter[1], config.WindIndicatorRadius)
 	dc.Stroke()
