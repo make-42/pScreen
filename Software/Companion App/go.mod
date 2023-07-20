@@ -3,6 +3,7 @@ module pscreenapp
 go 1.18
 
 require (
+	github.com/4kills/go-zlib v1.1.1
 	github.com/charmbracelet/bubbletea v0.24.2
 	github.com/disintegration/imaging v1.6.2
 	github.com/fogleman/gg v1.3.0

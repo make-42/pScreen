@@ -1,11 +1,12 @@
+#include "comms/comms.h"
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <u8g2.h>
 
-#define BLOCKSIZE 2048
 #define CANVAS_WIDTH 256
 #define CANVAS_HEIGHT 64
 
@@ -122,13 +123,14 @@ int main() {
   int x;
   int y;
   int z;
-  char frame_buffer[BLOCKSIZE];
+  char frame_buffer[FRAMEBUFFER_SIZE];
+  char *frame_buffer_address;
   //  Main loop
   for (;;) {
     // Receive screen update
-    for (i = 0; i < BLOCKSIZE; ++i) {
-      frame_buffer[i] = getchar();
-    }
+    frame_buffer_address = get_frame();
+    memcpy(&frame_buffer, frame_buffer_address, FRAMEBUFFER_SIZE);
+    free(frame_buffer_address);
     // Screen draw logic
     u8g2_ClearBuffer(&u8g2);
     u8g2_SetDrawColor(&u8g2, 1);
@@ -145,6 +147,6 @@ int main() {
     u8g2_UpdateDisplay(&u8g2);
 
     //  Send unblock command
-    printf("O");
+    signal_ready_to_receive_next_frame();
   }
 }

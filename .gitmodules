@@ -7,3 +7,6 @@
 [submodule "Software/Firmware/u8g2"]
 	path = Software/Firmware/u8g2
 	url = https://github.com/olikraus/u8g2
+[submodule "Software/Firmware/zlib"]
+	path = Software/Firmware/zlib
+	url = https://github.com/madler/zlib

@@ -16,12 +16,17 @@ pico_sdk_init()
 
 # rest of your project
 
-add_executable(pscreen-ssd1306
-	ssd1306ver.c pico-ssd1306/ssd1306.c
+add_executable(
+    pscreen-ssd1306
+	ssd1306ver.c 
+    pico-ssd1306/ssd1306.c 
+    comms/comms.c
 )
 
-add_executable(pscreen-ssd1322
+add_executable(
+    pscreen-ssd1322
 	ssd1322ver.c
+    comms/comms.c
 )
 
 target_include_directories(pscreen-ssd1306
@@ -38,8 +43,21 @@ target_include_directories(pscreen-ssd1322
         u8g2/csrc
 )
 
+target_include_directories(pscreen-ssd1306
+    PRIVATE
+        zlib
+)
+
+target_include_directories(pscreen-ssd1322
+    PRIVATE
+        zlib
+)
+
 file(GLOB U8G2_SRC u8g2/csrc/*.c)
 add_library(u8g2 ${U8G2_SRC})
+
+file(GLOB ZLIB_SRC zlib/*.c)
+add_library(zlib ${ZLIB_SRC})
 
 target_link_options(pscreen-ssd1306 PRIVATE -Xlinker --print-memory-usage)
 target_compile_options(pscreen-ssd1306 PRIVATE -Wall -Wextra -DCFG_TUSB_DEBUG=1)
@@ -48,8 +66,8 @@ target_link_options(pscreen-ssd1322 PRIVATE -Xlinker --print-memory-usage)
 target_compile_options(pscreen-ssd1322 PRIVATE -Wall -Wextra -DCFG_TUSB_DEBUG=1)
 
 
-target_link_libraries(pscreen-ssd1306 pico_stdlib hardware_i2c)
-target_link_libraries(pscreen-ssd1322 pico_stdlib u8g2 hardware_spi)
+target_link_libraries(pscreen-ssd1306 pico_stdlib hardware_i2c zlib)
+target_link_libraries(pscreen-ssd1322 pico_stdlib u8g2 hardware_spi zlib)
 
 pico_enable_stdio_usb(pscreen-ssd1306 1)
 pico_enable_stdio_uart(pscreen-ssd1306 0)

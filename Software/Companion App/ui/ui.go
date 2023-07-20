@@ -200,6 +200,7 @@ func (m Model) View() string {
 	keybinds = append(keybinds, i18n.I18n.Keybinds.NavigateKeybind, i18n.I18n.Keybinds.ExitKeybind)
 	// The footer
 	s += "\n" + components.KeybindsHints(keybinds) + "\n"
+	s += "\n" + components.StatsFooter() + "\n"
 
 	// Send the UI for rendering
 	return s

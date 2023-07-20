@@ -31,8 +31,13 @@ type bridgeData struct {
 	CommsReady          bool
 }
 
-var BridgeData = bridgeData{LoadedModules: []int{constants.MediaModuleID}, DelayBetweenModules: config.DelayBetweenModules, CommsReady: false}
+var BridgeData = bridgeData{
+	LoadedModules:       []int{constants.MediaModuleID},
+	DelayBetweenModules: config.DelayBetweenModules,
+	CommsReady:          false,
+}
 var Port serial.Port
+var FrameDeltaTime int64
 
 func BridgeStartXMit() {
 	Port = comms.EstablishComms()
@@ -51,6 +56,7 @@ func BridgeMainThread() {
 			go notifications.ListenForNotifications()
 		}
 	}
+	lastFrameT := time.Now().UnixNano()
 	for {
 		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(BridgeData.DelayBetweenModules)*1000 {
 			BridgeData.ModuleDisplayStart = time.Now().UTC().UnixMilli()
@@ -65,6 +71,8 @@ func BridgeMainThread() {
 			comms.SendBytes(Port, frameBytes)
 		}
 		time.Sleep(time.Second * config.RenderDeviceScreenEveryXMilliseconds / 1000)
+		FrameDeltaTime = time.Now().UnixNano() - lastFrameT
+		lastFrameT = time.Now().UnixNano()
 	}
 }
 
