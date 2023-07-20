@@ -30,12 +30,10 @@ int main() {
   stdio_init_all();
   printf("configuring pins...\n");
   setup_gpios();
-  int i;
   int x;
   int y;
   int z;
-  char frame_buffer[FRAMEBUFFER_SIZE];
-  char *frame_buffer_address;
+  char *frame_buffer_address = malloc(FRAMEBUFFER_SIZE);
   ssd1306_t disp_a;
   ssd1306_t disp_b;
   disp_a.external_vcc = false;
@@ -51,16 +49,15 @@ int main() {
   //  Main loop
   for (;;) {
     // Receive screen update
-    frame_buffer_address = get_frame();
-    memcpy(&frame_buffer, frame_buffer_address, FRAMEBUFFER_SIZE);
-    free(frame_buffer_address);
+    get_frame(frame_buffer_address);
     // Screen draw logic
     ssd1306_clear(&disp_a);
     ssd1306_clear(&disp_b);
     for (x = 0; x < CANVAS_WIDTH; x++) {
       for (y = 0; y < CANVAS_HEIGHT / 8; y++) {
         for (z = 0; z < 8; z++) {
-          if ((frame_buffer[x * CANVAS_HEIGHT / 8 + y] >> (7 - z)) & 0x01) {
+          if ((frame_buffer_address[x * CANVAS_HEIGHT / 8 + y] >> (7 - z)) &
+              0x01) {
             if (x > 127) {
               ssd1306_draw_pixel(&disp_b, x - 128, y * 8 + z);
             } else {
@@ -75,4 +72,5 @@ int main() {
     //  Send unblock command
     signal_ready_to_receive_next_frame();
   }
+  free(frame_buffer_address);
 }

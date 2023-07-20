@@ -119,18 +119,14 @@ int main() {
   stdio_init_all();
   display_init();
   waiting_for_companion_app_message();
-  int i;
   int x;
   int y;
   int z;
-  char frame_buffer[FRAMEBUFFER_SIZE];
-  char *frame_buffer_address;
+  char *frame_buffer_address = malloc(FRAMEBUFFER_SIZE);
   //  Main loop
   for (;;) {
     // Receive screen update
-    frame_buffer_address = get_frame();
-    memcpy(&frame_buffer, frame_buffer_address, FRAMEBUFFER_SIZE);
-    free(frame_buffer_address);
+    get_frame(frame_buffer_address);
     // Screen draw logic
     u8g2_ClearBuffer(&u8g2);
     u8g2_SetDrawColor(&u8g2, 1);
@@ -138,7 +134,8 @@ int main() {
     for (x = 0; x < CANVAS_WIDTH; x++) {
       for (y = 0; y < CANVAS_HEIGHT / 8; y++) {
         for (z = 0; z < 8; z++) {
-          if ((frame_buffer[x * CANVAS_HEIGHT / 8 + y] >> (7 - z)) & 0x01) {
+          if ((frame_buffer_address[x * CANVAS_HEIGHT / 8 + y] >> (7 - z)) &
+              0x01) {
             u8g2_DrawPixel(&u8g2, x, y * 8 + z);
           }
         }
@@ -149,4 +146,5 @@ int main() {
     //  Send unblock command
     signal_ready_to_receive_next_frame();
   }
+  free(frame_buffer_address);
 }
