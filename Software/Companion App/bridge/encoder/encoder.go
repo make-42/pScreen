@@ -6,14 +6,15 @@ import (
 	"pscreenapp/config"
 	"pscreenapp/utils"
 
-	"github.com/4kills/go-zlib"
+	"bytes"
+	"compress/zlib"
 )
 
 var UncompressedBytesN = -1
 var CompressedBytesN = -1
 
 func EncodeFrameToBytes(im *image.RGBA) []byte {
-	var bytes []byte
+	var uncompressedBytes []byte
 	for x := 0; x < config.CanvasRenderDimensions.X; x++ {
 		for y := 0; y < config.CanvasRenderDimensions.Y/8; y++ {
 			currentByte := byte(0)
@@ -23,17 +24,20 @@ func EncodeFrameToBytes(im *image.RGBA) []byte {
 					currentByte += byte(utils.IntPow(2, 7-z))
 				}
 			}
-			bytes = append(bytes, currentByte)
+			uncompressedBytes = append(uncompressedBytes, currentByte)
 		}
 	}
-	w, err := zlib.NewWriterLevel(nil, zlib.BestCompression) // requires no writer if WriteBuffer is used
+	var b bytes.Buffer
+	w, err := zlib.NewWriterLevel(&b, zlib.BestCompression) // requires no writer if WriteBuffer is used
 	utils.CheckError(err)
-	defer w.Close()
-	compressedBytes, _ := w.WriteBuffer([]byte(bytes), nil) // compresses input & returns compressed []byte
+	_, err = w.Write([]byte(uncompressedBytes))
+	utils.CheckError(err)
+	w.Close()
+	compressedBytes := b.Bytes()
 	outputBytes := make([]byte, 2)
 	binary.LittleEndian.PutUint16(outputBytes, uint16(len(compressedBytes)))
 	outputBytes = append(outputBytes, compressedBytes...)
-	UncompressedBytesN = len(bytes)
+	UncompressedBytesN = len(uncompressedBytes)
 	CompressedBytesN = len(outputBytes)
 	return outputBytes
 }
