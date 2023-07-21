@@ -4,6 +4,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"image/gif"
 	"image/png"
 	"os"
 	"pscreenapp/bridge/encoder"
@@ -21,9 +22,11 @@ import (
 var BigFont font.Face
 var MediumFont font.Face
 var MedSmallFont font.Face
+var MedSmallerFont font.Face
 var SmallFont font.Face
 var TinyFont font.Face
 var BackgroundImage image.Image
+var QRCodeModuleGIF *gif.GIF
 
 func LoadRendererSharedRessources() {
 	var err error
@@ -33,6 +36,8 @@ func LoadRendererSharedRessources() {
 	utils.CheckError(err)
 	MedSmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 24)
 	utils.CheckError(err)
+	MedSmallerFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 20)
+	utils.CheckError(err)
 	SmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 16)
 	utils.CheckError(err)
 	TinyFont, err = gg.LoadFontFace("./assets/fonts/Lato-Bold.ttf", 12)
@@ -41,6 +46,11 @@ func LoadRendererSharedRessources() {
 	defer imgFile.Close()
 	utils.CheckError(err)
 	BackgroundImage, _, err = image.Decode(imgFile)
+	utils.CheckError(err)
+	gifFile, err := os.Open("./assets/gif/komi-san-48.gif")
+	defer gifFile.Close()
+	utils.CheckError(err)
+	QRCodeModuleGIF, err = gif.DecodeAll(gifFile)
 	utils.CheckError(err)
 }
 

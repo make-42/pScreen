@@ -8,6 +8,7 @@ type ModuleStrings struct {
 	MediaModule       string
 	MonitorModule     string
 	PongModule        string
+	QRCodeModule      string
 	ScreensaverModule string
 	WeatherModule     string
 }
@@ -24,6 +25,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.MonitorModule
 	case constants.PongModuleID:
 		return I18n.Modules.PongModule
+	case constants.QRCodeModuleID:
+		return I18n.Modules.QRCodeModule
 	case constants.ScreensaverModuleID:
 		return I18n.Modules.ScreensaverModule
 	case constants.WeatherModuleID:
@@ -81,6 +84,7 @@ var en_US = LanguageStrings{
 		MediaModule:       "Media",
 		MonitorModule:     "Monitor",
 		PongModule:        "Pong",
+		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Screensaver",
 		WeatherModule:     "Weather",
 	},
@@ -109,6 +113,7 @@ var fr_FR = LanguageStrings{
 		MediaModule:       "Média",
 		MonitorModule:     "Moniteur",
 		PongModule:        "Pong",
+		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Économiseur d'écran",
 		WeatherModule:     "Météo",
 	},

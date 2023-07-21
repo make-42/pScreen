@@ -9,6 +9,7 @@ import (
 	"pscreenapp/bridge/modules/monitor"
 	"pscreenapp/bridge/modules/notifications"
 	"pscreenapp/bridge/modules/pong"
+	"pscreenapp/bridge/modules/qrcode"
 	"pscreenapp/bridge/modules/screensaver"
 	"pscreenapp/bridge/modules/weather"
 	"pscreenapp/bridge/renderer"
@@ -95,6 +96,8 @@ func ReturnCurrentModule() modules.Module {
 			return monitor.MonitorModule
 		case constants.PongModuleID:
 			return pong.PongModule
+		case constants.QRCodeModuleID:
+			return qrcode.QRCodeModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
 		case constants.WeatherModuleID:
