@@ -75,3 +75,17 @@ func IsPointInRectangle(rectPos CoordsFloat, rectW, rectH float64, pointPos Coor
 	}
 	return false
 }
+
+func Min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func Max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}

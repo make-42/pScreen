@@ -2,7 +2,11 @@ package media
 
 import (
 	"image"
+	"image/color"
+	"image/draw"
 	"math"
+	"net/url"
+	"os"
 	"pscreenapp/bridge/modules"
 	"pscreenapp/bridge/renderer"
 	"pscreenapp/config"
@@ -11,10 +15,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 	"github.com/godbus/dbus"
 	"github.com/leberKleber/go-mpris"
+	"github.com/makeworld-the-better-one/dither/v2"
+	"github.com/nfnt/resize"
 )
+
+var CurrentMediaArtURL = ""
+var CurrentMediaArtImage *image.RGBA
 
 var MediaModule modules.Module = modules.Module{RenderFunction: func(im *image.RGBA) *image.RGBA {
 	currentPlayingMediaInfo := GetCurrentPlayingMediaInfo()
@@ -40,6 +50,9 @@ var MediaModule modules.Module = modules.Module{RenderFunction: func(im *image.R
 	}
 	dc.DrawCircle(4+currentMediaPositionX, GetMediaProgressBarYFromX(currentMediaPositionX), float64(config.MediaProgressBarIndicatorRadius))
 	dc.Fill()
+	if CurrentMediaArtURL != "" {
+		return renderer.CompositeBackgroundAndForeground(CurrentMediaArtImage, renderer.RemoveAntiAliasing(im))
+	}
 	return renderer.AddWallpaperToFrame(renderer.RemoveAntiAliasing(im))
 }}
 
@@ -71,6 +84,39 @@ func ListPlayers() []string {
 	return mprisNames
 }
 
+func UpdateMediaArt(mediaArtURL string) {
+	if mediaArtURL != CurrentMediaArtURL {
+		CurrentMediaArtURL = mediaArtURL
+		if CurrentMediaArtURL != "" {
+			u, err := url.ParseRequestURI(CurrentMediaArtURL)
+			utils.CheckError(err)
+			imgFile, err := os.Open(u.Path)
+			utils.CheckError(err)
+			defer imgFile.Close()
+			bgImg, _, err := image.Decode(imgFile)
+			utils.CheckError(err)
+			bgTImg := resize.Resize(uint(utils.Min(config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+			bgBImg := resize.Resize(uint(utils.Max(config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+			palette := []color.Color{
+				color.Black,
+				color.White,
+			}
+			d := dither.NewDitherer(palette)
+			//d.Mapper = dither.Bayer(2, 2, 1.0)
+			d.Matrix = dither.FloydSteinberg
+
+			bgTImg = d.Dither(bgTImg)
+			bgBImg = d.Dither(renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10)))
+			tB := bgTImg.Bounds()
+			bB := bgBImg.Bounds()
+			m := image.NewRGBA(image.Rect(0, 0, config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y))
+			draw.Draw(m, bB.Bounds().Add(image.Pt((config.CanvasRenderDimensions.X-bB.Dx())/2, (config.CanvasRenderDimensions.Y-bB.Dy())/2)), bgBImg.(*image.RGBA), bB.Min, draw.Src)
+			draw.Draw(m, tB.Bounds().Add(image.Pt((config.CanvasRenderDimensions.X-tB.Dx()), (config.CanvasRenderDimensions.Y-tB.Dy())/2)), bgTImg.(*image.RGBA), tB.Min, draw.Src)
+			CurrentMediaArtImage = m
+		}
+	}
+}
+
 func GetCurrentPlayingMediaInfo() CurrentPlayingMediaInfo {
 	switch runtime.GOOS {
 	case "linux":
@@ -100,6 +146,9 @@ func GetCurrentPlayingMediaInfo() CurrentPlayingMediaInfo {
 		if len(mediaArtists) != 0 {
 			mediaArtist = mediaArtists[0]
 		}
+		mediaArtURL, err := mediaMetadata.MPRISArtURL()
+		utils.CheckError(err)
+		UpdateMediaArt(mediaArtURL)
 		return CurrentPlayingMediaInfo{mediaTitle, mediaAlbum, mediaArtist, mediaPosition, mediaDuration}
 	default:
 		return CurrentPlayingMediaInfo{"Platform not supported", "Sorry", "", 0, 0}

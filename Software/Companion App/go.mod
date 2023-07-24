@@ -10,7 +10,9 @@ require (
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/make-42/go-notifications v0.3.0
+	github.com/makeworld-the-better-one/dither/v2 v2.3.0
 	github.com/muesli/termenv v0.15.1
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pbnjay/pixfont v0.0.0-20200714042608-33b744692567
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
