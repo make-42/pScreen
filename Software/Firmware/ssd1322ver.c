@@ -2,6 +2,7 @@
 #include "hardware/gpio.h"
 #include "hardware/spi.h"
 #include "pico/stdlib.h"
+#include "u8g2/csrc/u8g2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -110,8 +111,8 @@ void display_init() {
 void waiting_for_companion_app_message() {
   u8g2_ClearBuffer(&u8g2);
   u8g2_SetDrawColor(&u8g2, 1);
-  u8g2_SetFont(&u8g2, u8g2_font_t0_11_te);
-  u8g2_DrawStr(&u8g2, 0, 20, "Waiting for companion app...");
+  u8g2_SetFont(&u8g2, u8g2_font_timB10_tf);
+  u8g2_DrawStr(&u8g2, 3, 20, "Waiting for companion app...");
   u8g2_UpdateDisplay(&u8g2);
 }
 
@@ -129,7 +130,6 @@ int main() {
     get_frame(frame_buffer_address);
     // Screen draw logic
     u8g2_ClearBuffer(&u8g2);
-    u8g2_SetDrawColor(&u8g2, 1);
 
     for (x = 0; x < CANVAS_WIDTH; x++) {
       for (y = 0; y < CANVAS_HEIGHT / 8; y++) {
