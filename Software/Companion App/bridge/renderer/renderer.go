@@ -30,17 +30,17 @@ var QRCodeModuleGIF *gif.GIF
 
 func LoadRendererSharedRessources() {
 	var err error
-	BigFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 40)
+	BigFont, err = gg.LoadFontFace("./assets/fonts/iosevka-heavy.ttf", 40)
 	utils.CheckError(err)
-	MediumFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 30)
+	MediumFont, err = gg.LoadFontFace("./assets/fonts/iosevka-heavy.ttf", 30)
 	utils.CheckError(err)
-	MedSmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 24)
+	MedSmallFont, err = gg.LoadFontFace("./assets/fonts/iosevka-heavy.ttf", 24)
 	utils.CheckError(err)
-	MedSmallerFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 20)
+	MedSmallerFont, err = gg.LoadFontFace("./assets/fonts/iosevka-heavy.ttf", 20)
 	utils.CheckError(err)
-	SmallFont, err = gg.LoadFontFace("./assets/fonts/BegikaFixed.ttf", 16)
+	SmallFont, err = gg.LoadFontFace("./assets/fonts/iosevka-heavy.ttf", 16) // BegikaFixed.ttf
 	utils.CheckError(err)
-	TinyFont, err = gg.LoadFontFace("./assets/fonts/Lato-Bold.ttf", 12)
+	TinyFont, err = gg.LoadFontFace("./assets/fonts/iosevka-medium.ttf", 12) // Lato-Bold.ttf
 	utils.CheckError(err)
 	imgFile, err := os.Open("./assets/img/bg.png")
 	defer imgFile.Close()
