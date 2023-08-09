@@ -22,7 +22,7 @@ Rotate the pieces in your slicer accordingly and print with standard settings an
 (note: These files are generated from the OpenSCAD files in `CAD/OpenSCAD/`. You can modify and create new presets in the `.json` files in that directory and generate the corresponding files using OpenSCAD. The variables are made to be copied between the files. This enables quickly adding support for new screens.).
 
 ### Wiring
-Wire all the parts up according to this diagram (found in `CAD/Fritzing/`.
+Wire all the parts up according to this diagram (found in `CAD/Fritzing/`).
 ![SSD 1322 wiring](https://github.com/make-42/pScreen/assets/17462236/6dde6025-8381-4c4e-9007-ef2cfe211e92)
 
 ### Software
