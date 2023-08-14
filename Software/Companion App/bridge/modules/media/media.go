@@ -4,11 +4,11 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
-	"math"
 	"net/url"
 	"os"
 	"pscreenapp/bridge/modules"
 	"pscreenapp/bridge/renderer"
+	"pscreenapp/bridge/renderer/elements"
 	"pscreenapp/config"
 	"pscreenapp/utils"
 	"runtime"
@@ -37,19 +37,7 @@ var MediaModule modules.Module = modules.Module{RenderFunction: func(im *image.R
 	dc.DrawStringAnchored(currentPlayingMediaInfo.Title, 4, 0, 0, 1)
 	dc.DrawStringAnchored(now.Format(currentPlayingMediaInfo.Album), 4, 12, 0, 1)
 	dc.DrawStringAnchored(currentPlayingMediaInfo.Artist, 4, 24, 0, 1)
-	dc.DrawStringAnchored(utils.FormatDuration(currentPlayingMediaInfo.Position), 4, float64(config.CanvasRenderDimensions.Y-8)-float64(config.MediaProgressBarHeight), 0, 0)
-	dc.DrawStringAnchored(utils.FormatDuration(currentPlayingMediaInfo.Duration), float64(config.CanvasRenderDimensions.X-4), float64(config.CanvasRenderDimensions.Y-8)-float64(config.MediaProgressBarHeight), 1, 0)
-	mediaProgressBarWidth := config.CanvasRenderDimensions.X - 8
-	for x := 0; x < mediaProgressBarWidth; x++ {
-		dc.DrawCircle(float64(x+4), GetMediaProgressBarYFromX(float64(x)), 1)
-		dc.Fill()
-	}
-	currentMediaPositionX := 0.0
-	if currentPlayingMediaInfo.Duration != 0 {
-		currentMediaPositionX = float64(mediaProgressBarWidth) * currentPlayingMediaInfo.Position / currentPlayingMediaInfo.Duration
-	}
-	dc.DrawCircle(4+currentMediaPositionX, GetMediaProgressBarYFromX(currentMediaPositionX), float64(config.MediaProgressBarIndicatorRadius))
-	dc.Fill()
+	elements.DrawMediaProgressBar(dc, currentPlayingMediaInfo.Position, currentPlayingMediaInfo.Duration)
 	if CurrentMediaArtURL != "" {
 		return renderer.CompositeBackgroundAndForeground(CurrentMediaArtImage, renderer.RemoveAntiAliasing(im))
 	}
@@ -62,10 +50,6 @@ type CurrentPlayingMediaInfo struct {
 	Artist   string
 	Position float64
 	Duration float64
-}
-
-func GetMediaProgressBarYFromX(x float64) float64 {
-	return float64(config.CanvasRenderDimensions.Y-4) - float64(config.MediaProgressBarIndicatorRadius) + (math.Sin(float64(x)*math.Pi*config.MediaProgressBarWaveScale)-1)*(float64(config.MediaProgressBarHeight)/2-2)
 }
 
 func ListPlayers() []string {

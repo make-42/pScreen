@@ -3,6 +3,7 @@ package constants
 const (
 	ClockModuleID = iota
 	BlankModuleID
+	DiscordModuleID
 	MediaModuleID
 	MonitorModuleID
 	PongModuleID
@@ -12,7 +13,7 @@ const (
 )
 
 var AllModules = []int{
-	BlankModuleID, ClockModuleID, MediaModuleID, MonitorModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, WeatherModuleID,
+	BlankModuleID, ClockModuleID, DiscordModuleID, MediaModuleID, MonitorModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, WeatherModuleID,
 }
 
 const (

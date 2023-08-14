@@ -5,6 +5,7 @@ import (
 	"pscreenapp/bridge/modules"
 	"pscreenapp/bridge/modules/blank"
 	"pscreenapp/bridge/modules/clock"
+	"pscreenapp/bridge/modules/discord"
 	"pscreenapp/bridge/modules/media"
 	"pscreenapp/bridge/modules/monitor"
 	"pscreenapp/bridge/modules/notifications"
@@ -90,6 +91,8 @@ func ReturnCurrentModule() modules.Module {
 			return blank.BlankModule
 		case constants.ClockModuleID:
 			return clock.ClockModule
+		case constants.DiscordModuleID:
+			return discord.DiscordModule
 		case constants.MediaModuleID:
 			return media.MediaModule
 		case constants.MonitorModuleID:

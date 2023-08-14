@@ -55,7 +55,7 @@ const PongTimestepsPerFrame = 4
 
 // QRCode module
 const QRCodeContent = "WIFI:S:SSID;T:WPA;P:PASSWORD;H:false;;"
-const QRCodeTitle = "SSD"
+const QRCodeTitle = "SSID"
 const QRCodeDescription = "PASSWORD"
 
 // Screensaver module
@@ -72,3 +72,8 @@ const NotificationsDisplayForXMilliseconds = 7000
 const NotificationsInvertForXMilliseconds = 1000
 const NotificationsInvertDisplayEveryXFrames = 2
 const NotificationsSystemSendsDoubleNotificationMessages = true
+
+// Discord module
+const DiscordAuthToken = ""
+const DiscordGuildID = ""
+const DiscordUserID = ""

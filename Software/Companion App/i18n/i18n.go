@@ -5,6 +5,7 @@ import "pscreenapp/constants"
 type ModuleStrings struct {
 	BlankModule       string
 	ClockModule       string
+	DiscordModule     string
 	MediaModule       string
 	MonitorModule     string
 	PongModule        string
@@ -19,6 +20,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.BlankModule
 	case constants.ClockModuleID:
 		return I18n.Modules.ClockModule
+	case constants.DiscordModuleID:
+		return I18n.Modules.DiscordModule
 	case constants.MediaModuleID:
 		return I18n.Modules.MediaModule
 	case constants.MonitorModuleID:
@@ -81,6 +84,7 @@ var en_US = LanguageStrings{
 	},
 	Modules: ModuleStrings{BlankModule: "Blank",
 		ClockModule:       "Clock",
+		DiscordModule:     "Discord",
 		MediaModule:       "Media",
 		MonitorModule:     "Monitor",
 		PongModule:        "Pong",
@@ -110,6 +114,7 @@ var fr_FR = LanguageStrings{
 	Modules: ModuleStrings{
 		BlankModule:       "Vide",
 		ClockModule:       "Horloge",
+		DiscordModule:     "Discord",
 		MediaModule:       "Média",
 		MonitorModule:     "Moniteur",
 		PongModule:        "Pong",
