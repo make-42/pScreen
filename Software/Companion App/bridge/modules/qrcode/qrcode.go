@@ -8,7 +8,7 @@ import (
 	"pscreenapp/config"
 	"pscreenapp/utils"
 
-	"github.com/fogleman/gg"
+	"git.sr.ht/~sbinet/gg"
 	"github.com/skip2/go-qrcode"
 )
 

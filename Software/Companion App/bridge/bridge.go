@@ -72,7 +72,7 @@ func BridgeMainThread() {
 		if BridgeData.CommsReady {
 			comms.SendBytes(Port, frameBytes)
 		}
-		time.Sleep(time.Second * config.RenderDeviceScreenEveryXMilliseconds / 1000)
+		time.Sleep(time.Millisecond*config.RenderDeviceScreenEveryXMilliseconds - time.Nanosecond*time.Duration(time.Now().UnixNano()-lastFrameT))
 		FrameDeltaTime = time.Now().UnixNano() - lastFrameT
 		lastFrameT = time.Now().UnixNano()
 	}

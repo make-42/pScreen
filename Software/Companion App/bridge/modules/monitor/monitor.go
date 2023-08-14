@@ -9,7 +9,7 @@ import (
 	"pscreenapp/utils"
 	"time"
 
-	"github.com/fogleman/gg"
+	"git.sr.ht/~sbinet/gg"
 	"github.com/shirou/gopsutil/cpu"
 )
 

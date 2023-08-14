@@ -8,7 +8,7 @@ import (
 	"pscreenapp/utils"
 	"time"
 
-	"github.com/fogleman/gg"
+	"git.sr.ht/~sbinet/gg"
 	"github.com/make-42/go-notifications"
 )
 

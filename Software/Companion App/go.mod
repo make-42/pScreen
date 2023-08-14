@@ -3,11 +3,10 @@ module pscreenapp
 go 1.18
 
 require (
+	git.sr.ht/~sbinet/gg v0.5.0
 	github.com/bwmarrin/discordgo v0.27.1
 	github.com/charmbracelet/bubbletea v0.24.2
-	github.com/davecgh/go-spew v1.1.1
 	github.com/disintegration/imaging v1.6.2
-	github.com/fogleman/gg v1.3.0
 	github.com/godbus/dbus v4.1.0+incompatible
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
@@ -25,6 +24,7 @@ require (
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
+	github.com/campoy/embedmd v1.0.0 // indirect
 	github.com/containerd/console v1.0.4-0.20230313162750-1ae8d489ac81 // indirect
 	github.com/creack/goselect v0.1.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
@@ -37,6 +37,7 @@ require (
 	github.com/muesli/ansi v0.0.0-20211018074035-2e021307bc4b // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect

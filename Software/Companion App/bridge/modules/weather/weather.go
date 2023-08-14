@@ -12,7 +12,7 @@ import (
 	"pscreenapp/utils"
 	"time"
 
-	"github.com/fogleman/gg"
+	"git.sr.ht/~sbinet/gg"
 )
 
 var WeatherModule modules.Module = modules.Module{RenderFunction: func(im *image.RGBA) *image.RGBA {

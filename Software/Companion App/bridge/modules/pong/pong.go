@@ -10,7 +10,7 @@ import (
 	"pscreenapp/utils"
 	"time"
 
-	"github.com/fogleman/gg"
+	"git.sr.ht/~sbinet/gg"
 	"go.einride.tech/pid"
 )
 

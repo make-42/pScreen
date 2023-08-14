@@ -9,8 +9,8 @@ import (
 	"pscreenapp/utils"
 	"time"
 
+	"git.sr.ht/~sbinet/gg"
 	"github.com/bwmarrin/discordgo"
-	"github.com/fogleman/gg"
 )
 
 var discordSession *discordgo.Session

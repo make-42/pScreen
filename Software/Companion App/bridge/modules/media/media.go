@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
+	"git.sr.ht/~sbinet/gg"
 	"github.com/disintegration/imaging"
-	"github.com/fogleman/gg"
 	"github.com/godbus/dbus"
 	"github.com/leberKleber/go-mpris"
 	"github.com/makeworld-the-better-one/dither/v2"
@@ -34,9 +34,9 @@ var MediaModule modules.Module = modules.Module{RenderFunction: func(im *image.R
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
 	dc.SetFontFace(renderer.TinyFont)
-	dc.DrawStringAnchored(currentPlayingMediaInfo.Title, 4, 0, 0, 1)
-	dc.DrawStringAnchored(now.Format(currentPlayingMediaInfo.Album), 4, 12, 0, 1)
-	dc.DrawStringAnchored(currentPlayingMediaInfo.Artist, 4, 24, 0, 1)
+	dc.DrawStringAnchored(currentPlayingMediaInfo.Title, 4, -2, 0, 1)
+	dc.DrawStringAnchored(now.Format(currentPlayingMediaInfo.Album), 4, 10, 0, 1)
+	dc.DrawStringAnchored(currentPlayingMediaInfo.Artist, 4, 22, 0, 1)
 	elements.DrawMediaProgressBar(dc, currentPlayingMediaInfo.Position, currentPlayingMediaInfo.Duration)
 	if CurrentMediaArtURL != "" {
 		return renderer.CompositeBackgroundAndForeground(CurrentMediaArtImage, renderer.RemoveAntiAliasing(im))
@@ -88,9 +88,14 @@ func UpdateMediaArt(mediaArtURL string) {
 			d := dither.NewDitherer(palette)
 			//d.Mapper = dither.Bayer(2, 2, 1.0)
 			d.Matrix = dither.FloydSteinberg
+			bgBImg = renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10))
+			if !config.RGBXMit {
+				bgBImg = d.Dither(bgBImg)
+				bgTImg = d.Dither(bgTImg)
+			} else {
+				bgTImg = renderer.YCbCrImgToRGBAImg(bgTImg.(*image.YCbCr))
+			}
 
-			bgTImg = d.Dither(bgTImg)
-			bgBImg = d.Dither(renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10)))
 			tB := bgTImg.Bounds()
 			bB := bgBImg.Bounds()
 			m := image.NewRGBA(image.Rect(0, 0, config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y))

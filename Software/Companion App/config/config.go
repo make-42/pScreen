@@ -8,17 +8,20 @@ const UpdateUIEveryXMilliseconds = 500
 const PaddingIndentAmount = 1
 
 const DelayBetweenModules = 5
-const RenderDeviceScreenEveryXMilliseconds = 0
+const RenderDeviceScreenEveryXMilliseconds = 1000
 
 var CanvasRenderDimensions = utils.Coords{X: 256, Y: 64}
 
 var SerialPortToUse string = ""
 
 const SerialPortBaudRate = 115200
+const RGBXMit = false
 
 const I18nLanguage = "en_US"
 
 const RotateScreen180Deg = false
+const CircularScreenLayout = false
+const UseWallpaper = true
 
 const DebugSaveScreen = false
 

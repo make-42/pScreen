@@ -15,18 +15,28 @@ var CompressedBytesN = -1
 
 func EncodeFrameToBytes(im *image.RGBA) []byte {
 	var uncompressedBytes []byte
-	for x := 0; x < config.CanvasRenderDimensions.X; x++ {
-		for y := 0; y < config.CanvasRenderDimensions.Y/8; y++ {
-			currentByte := byte(0)
-			for z := 0; z < 8; z++ {
-				rgba := im.RGBAAt(x, y*8+z)
-				if rgba.R == 255 {
-					currentByte += byte(utils.IntPow(2, 7-z))
-				}
+	if config.RGBXMit {
+		for x := 0; x < config.CanvasRenderDimensions.X; x++ {
+			for y := 0; y < config.CanvasRenderDimensions.Y; y++ {
+				rgba := im.RGBAAt(x, y)
+				uncompressedBytes = append(uncompressedBytes, byte(rgba.R), byte(rgba.G), byte(rgba.B))
 			}
-			uncompressedBytes = append(uncompressedBytes, currentByte)
+		}
+	} else {
+		for x := 0; x < config.CanvasRenderDimensions.X; x++ {
+			for y := 0; y < config.CanvasRenderDimensions.Y/8; y++ {
+				currentByte := byte(0)
+				for z := 0; z < 8; z++ {
+					rgba := im.RGBAAt(x, y*8+z)
+					if rgba.R == 255 {
+						currentByte += byte(utils.IntPow(2, 7-z))
+					}
+				}
+				uncompressedBytes = append(uncompressedBytes, currentByte)
+			}
 		}
 	}
+
 	var b bytes.Buffer
 	w, err := zlib.NewWriterLevel(&b, zlib.BestCompression) // requires no writer if WriteBuffer is used
 	utils.CheckError(err)
