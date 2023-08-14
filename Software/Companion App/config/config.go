@@ -8,7 +8,7 @@ const UpdateUIEveryXMilliseconds = 500
 const PaddingIndentAmount = 1
 
 const DelayBetweenModules = 5
-const RenderDeviceScreenEveryXMilliseconds = 1000
+const RenderDeviceScreenEveryXMilliseconds = 0
 
 var CanvasRenderDimensions = utils.Coords{X: 256, Y: 64}
 
