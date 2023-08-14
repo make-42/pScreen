@@ -28,6 +28,6 @@ var ClockModule modules.Module = modules.Module{RenderFunction: func(im *image.R
 	}
 	dc.DrawStringAnchored(now.Format("3:04:05 PM"), float64(config.CanvasRenderDimensions.X-4), float64(config.CanvasRenderDimensions.Y-4), 1, 0)
 	dc.SetFontFace(renderer.MediumFont)
-	dc.DrawStringAnchored(now.Format("1/2/2006"), 4, -4, 0, 1)
+	dc.DrawStringAnchored(now.Format("1/2/2006"), 4, -8, 0, 1)
 	return renderer.AddWallpaperToFrame(renderer.RemoveAntiAliasing(im))
 }}
