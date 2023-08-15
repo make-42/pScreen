@@ -1,0 +1,38 @@
+# Maintainer: Louis Dalibard <louis.dalibard@gmail.com>
+_pkgbase="pscreen"
+pkgname="$_pkgbase-git"
+pkgver=r41.g6d7e691
+pkgrel=1
+pkgdesc="A companion app for the pScreen desktop clock"
+arch=("x86_64" "armv7h" "aarch64")
+url="https://github.com/make-42/pscreen"
+license=('GPL')
+groups=()
+depends=()
+makedepends=('go>=1.18')
+optdepends=()
+provides=("$_pkgbase")
+conflicts=("$_pkgbase")
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("git+https://github.com/make-42/pscreen.git")
+noextract=()
+md5sums=("SKIP") #autofill using updpkgsums
+
+pkgver() {
+	cd ${srcdir}/${_pkgbase}
+	echo "r$(git rev-list --count HEAD).g$(git rev-parse --short HEAD)"
+}
+
+build() {
+	cd "${srcdir}/${_pkgbase}/Software/Companion App"
+	go mod tidy
+	go build
+}
+	
+package() {
+	install -Dm755 "${srcdir}/${_pkgbase}/Software/Companion App/${_pkgbase}" "${_pkgbase}/usr/bin/${_pkgbase}"
+}

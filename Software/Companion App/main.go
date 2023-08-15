@@ -2,13 +2,13 @@ package main
 
 import (
 	"log"
-	"pscreenapp/bridge"
-	"pscreenapp/bridge/comms"
-	"pscreenapp/bridge/renderer"
-	"pscreenapp/config"
-	"pscreenapp/i18n"
-	"pscreenapp/ui"
-	"pscreenapp/utils"
+	"pscreen/bridge"
+	"pscreen/bridge/comms"
+	"pscreen/bridge/renderer"
+	"pscreen/config"
+	"pscreen/i18n"
+	"pscreen/ui"
+	"pscreen/utils"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

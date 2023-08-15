@@ -3,11 +3,11 @@ package components
 import (
 	"fmt"
 	"math"
-	"pscreenapp/bridge"
-	"pscreenapp/bridge/encoder"
-	"pscreenapp/config"
-	"pscreenapp/constants"
-	"pscreenapp/ui/styling"
+	"pscreen/bridge"
+	"pscreen/bridge/encoder"
+	"pscreen/config"
+	"pscreen/constants"
+	"pscreen/ui/styling"
 	"strings"
 
 	"github.com/muesli/termenv"

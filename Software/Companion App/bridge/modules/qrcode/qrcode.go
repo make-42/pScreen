@@ -3,10 +3,10 @@ package qrcode
 import (
 	"image"
 	"image/draw"
-	"pscreenapp/bridge/modules"
-	"pscreenapp/bridge/renderer"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/bridge/modules"
+	"pscreen/bridge/renderer"
+	"pscreen/config"
+	"pscreen/utils"
 
 	"git.sr.ht/~sbinet/gg"
 	"github.com/skip2/go-qrcode"

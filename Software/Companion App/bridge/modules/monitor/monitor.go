@@ -3,10 +3,10 @@ package monitor
 import (
 	"fmt"
 	"image"
-	"pscreenapp/bridge/modules"
-	"pscreenapp/bridge/renderer"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/bridge/modules"
+	"pscreen/bridge/renderer"
+	"pscreen/config"
+	"pscreen/utils"
 	"time"
 
 	"git.sr.ht/~sbinet/gg"

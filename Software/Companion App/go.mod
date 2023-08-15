@@ -1,4 +1,4 @@
-module pscreenapp
+module pscreen
 
 go 1.18
 

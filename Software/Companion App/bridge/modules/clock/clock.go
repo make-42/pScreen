@@ -3,9 +3,9 @@ package clock
 import (
 	"image"
 	"math"
-	"pscreenapp/bridge/modules"
-	"pscreenapp/bridge/renderer"
-	"pscreenapp/config"
+	"pscreen/bridge/modules"
+	"pscreen/bridge/renderer"
+	"pscreen/config"
 	"time"
 
 	"git.sr.ht/~sbinet/gg"

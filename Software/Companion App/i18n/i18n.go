@@ -1,6 +1,6 @@
 package i18n
 
-import "pscreenapp/constants"
+import "pscreen/constants"
 
 type ModuleStrings struct {
 	BlankModule       string

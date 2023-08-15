@@ -2,7 +2,7 @@ package blank
 
 import (
 	"image"
-	"pscreenapp/bridge/modules"
+	"pscreen/bridge/modules"
 )
 
 var BlankModule modules.Module = modules.Module{RenderFunction: func(im *image.RGBA) *image.RGBA {

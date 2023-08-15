@@ -1,8 +1,8 @@
 package comms
 
 import (
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/config"
+	"pscreen/utils"
 
 	"go.bug.st/serial"
 	"go.bug.st/serial/enumerator"

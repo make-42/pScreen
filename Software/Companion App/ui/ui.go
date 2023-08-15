@@ -2,14 +2,14 @@ package ui
 
 import (
 	"fmt"
-	"pscreenapp/bridge"
-	"pscreenapp/bridge/comms"
-	"pscreenapp/config"
-	"pscreenapp/constants"
-	"pscreenapp/i18n"
-	"pscreenapp/ui/components"
-	"pscreenapp/ui/styling"
-	"pscreenapp/utils"
+	"pscreen/bridge"
+	"pscreen/bridge/comms"
+	"pscreen/config"
+	"pscreen/constants"
+	"pscreen/i18n"
+	"pscreen/ui/components"
+	"pscreen/ui/styling"
+	"pscreen/utils"
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"

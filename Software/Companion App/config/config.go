@@ -4,8 +4,8 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"pscreenapp/constants"
-	"pscreenapp/utils"
+	"pscreen/constants"
+	"pscreen/utils"
 
 	"github.com/kirsle/configdir"
 	"gopkg.in/yaml.v3"
@@ -198,7 +198,7 @@ func ModuleIDsToConfigNames(moduleIDs []int) []string {
 }
 
 func getConfigPath() string {
-	configPath := configdir.LocalConfig("ontake", "pscreenapp")
+	configPath := configdir.LocalConfig("ontake", "pscreen")
 	configFilePath := filepath.Join(configPath, "config.yml")
 	utils.CheckError(configdir.MakePath(configPath))
 	return configFilePath

@@ -3,8 +3,8 @@ package encoder
 import (
 	"encoding/binary"
 	"image"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/config"
+	"pscreen/utils"
 
 	"bytes"
 	"compress/zlib"

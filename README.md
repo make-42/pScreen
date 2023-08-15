@@ -45,7 +45,7 @@ go build
 
 You can then run the client with:
 ```sh
-./pscreenapp
+./pscreen
 ```
 
 You can then select the connected device by pressing `b` and start broadcasting to it with `s`.

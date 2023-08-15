@@ -4,9 +4,9 @@ import (
 	"image"
 	"image/color"
 	"math/rand"
-	"pscreenapp/bridge/modules"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/bridge/modules"
+	"pscreen/config"
+	"pscreen/utils"
 )
 
 type Particle struct {

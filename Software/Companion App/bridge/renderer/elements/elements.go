@@ -2,8 +2,8 @@ package elements
 
 import (
 	"math"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/config"
+	"pscreen/utils"
 
 	"git.sr.ht/~sbinet/gg"
 )

@@ -2,11 +2,11 @@ package discord
 
 import (
 	"image"
-	"pscreenapp/bridge/modules"
-	"pscreenapp/bridge/renderer"
-	"pscreenapp/bridge/renderer/elements"
-	"pscreenapp/config"
-	"pscreenapp/utils"
+	"pscreen/bridge/modules"
+	"pscreen/bridge/renderer"
+	"pscreen/bridge/renderer/elements"
+	"pscreen/config"
+	"pscreen/utils"
 	"time"
 
 	"git.sr.ht/~sbinet/gg"
