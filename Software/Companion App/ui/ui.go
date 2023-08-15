@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"pscreenapp/bridge"
+	"pscreenapp/bridge/comms"
 	"pscreenapp/config"
 	"pscreenapp/constants"
 	"pscreenapp/i18n"
@@ -49,6 +50,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// These keys should exit the program.
 		case "ctrl+c", "q":
+			if config.Config.ModulePersistance {
+				config.Config.LoadedModules = config.ModuleIDsToConfigNames(bridge.BridgeData.LoadedModules)
+				config.SaveConfig()
+			}
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
@@ -106,7 +111,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor = 0
 			case constants.BridgeSettingsPageID:
 				if len(bridge.BridgeData.DetectedPorts) > 0 {
-					config.SerialPortToUse = bridge.BridgeData.DetectedPorts[m.cursor].Name
+					comms.SerialPortToUse = bridge.BridgeData.DetectedPorts[m.cursor].Name
 					m.currentPage = constants.MainPageID
 					m.cursor = 0
 				}
@@ -153,7 +158,7 @@ func (m Model) View() string {
 			}
 
 			// Render the row
-			s += styling.Indent(fmt.Sprintf("%s %s %s\n", shownOnScreen, cursor, i18n.ModuleIDToString(moduleID)), config.PaddingIndentAmount)
+			s += styling.Indent(fmt.Sprintf("%s %s %s\n", shownOnScreen, cursor, i18n.ModuleIDToString(moduleID)), config.Config.UIPaddingIndentAmount)
 		}
 		keybinds = append(keybinds, i18n.I18n.Keybinds.AddModuleKeybind, i18n.I18n.Keybinds.RemoveModuleKeybind, i18n.I18n.Keybinds.StartXMitKeybind, i18n.I18n.Keybinds.BridgeSettingsKeybind)
 
@@ -171,7 +176,7 @@ func (m Model) View() string {
 			}
 
 			// Render the row
-			s += styling.Indent(fmt.Sprintf("%s %s\n", cursor, i18n.ModuleIDToString(moduleID)), config.PaddingIndentAmount)
+			s += styling.Indent(fmt.Sprintf("%s %s\n", cursor, i18n.ModuleIDToString(moduleID)), config.Config.UIPaddingIndentAmount)
 		}
 		keybinds = append(keybinds, i18n.I18n.Keybinds.SelectKeybind, i18n.I18n.Keybinds.EscKeybind)
 
@@ -188,11 +193,11 @@ func (m Model) View() string {
 				cursor = styling.ColorFg(">", styling.HighlightedColor) // cursor!
 			}
 			portName := port.Name
-			if config.SerialPortToUse == portName {
+			if comms.SerialPortToUse == portName {
 				portName = styling.Bold(portName)
 			}
 			// Render the row
-			s += styling.Indent(fmt.Sprintf("%s %-10s %10s %10s \n", cursor, portName, port.VID, port.SerialNumber), config.PaddingIndentAmount)
+			s += styling.Indent(fmt.Sprintf("%s %-10s %10s %10s \n", cursor, portName, port.VID, port.SerialNumber), config.Config.UIPaddingIndentAmount)
 		}
 		keybinds = append(keybinds, i18n.I18n.Keybinds.SelectKeybind, i18n.I18n.Keybinds.EscKeybind)
 
@@ -209,7 +214,7 @@ func (m Model) View() string {
 type tickMsg time.Time
 
 func tickCmd() tea.Cmd {
-	return tea.Tick(time.Second*config.UpdateUIEveryXMilliseconds/1000, func(t time.Time) tea.Msg {
+	return tea.Tick(time.Millisecond*time.Duration(config.Config.UpdateUIEveryXMilliseconds), func(t time.Time) tea.Msg {
 		return tickMsg(t)
 	})
 }

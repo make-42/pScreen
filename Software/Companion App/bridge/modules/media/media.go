@@ -79,8 +79,8 @@ func UpdateMediaArt(mediaArtURL string) {
 			defer imgFile.Close()
 			bgImg, _, err := image.Decode(imgFile)
 			utils.CheckError(err)
-			bgTImg := resize.Resize(uint(utils.Min(config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
-			bgBImg := resize.Resize(uint(utils.Max(config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+			bgTImg := resize.Resize(uint(utils.Min(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+			bgBImg := resize.Resize(uint(utils.Max(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
 			palette := []color.Color{
 				color.Black,
 				color.White,
@@ -89,7 +89,7 @@ func UpdateMediaArt(mediaArtURL string) {
 			//d.Mapper = dither.Bayer(2, 2, 1.0)
 			d.Matrix = dither.FloydSteinberg
 			bgBImg = renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10))
-			if !config.RGBXMit {
+			if !config.Config.RGBXMit {
 				bgBImg = d.Dither(bgBImg)
 				bgTImg = d.Dither(bgTImg)
 			} else {
@@ -98,9 +98,9 @@ func UpdateMediaArt(mediaArtURL string) {
 
 			tB := bgTImg.Bounds()
 			bB := bgBImg.Bounds()
-			m := image.NewRGBA(image.Rect(0, 0, config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y))
-			draw.Draw(m, bB.Bounds().Add(image.Pt((config.CanvasRenderDimensions.X-bB.Dx())/2, (config.CanvasRenderDimensions.Y-bB.Dy())/2)), bgBImg.(*image.RGBA), bB.Min, draw.Src)
-			draw.Draw(m, tB.Bounds().Add(image.Pt((config.CanvasRenderDimensions.X-tB.Dx()), (config.CanvasRenderDimensions.Y-tB.Dy())/2)), bgTImg.(*image.RGBA), tB.Min, draw.Src)
+			m := image.NewRGBA(image.Rect(0, 0, config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y))
+			draw.Draw(m, bB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-bB.Dx())/2, (config.Config.CanvasRenderDimensions.Y-bB.Dy())/2)), bgBImg.(*image.RGBA), bB.Min, draw.Src)
+			draw.Draw(m, tB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-tB.Dx()), (config.Config.CanvasRenderDimensions.Y-tB.Dy())/2)), bgTImg.(*image.RGBA), tB.Min, draw.Src)
 			CurrentMediaArtImage = m
 		}
 	}

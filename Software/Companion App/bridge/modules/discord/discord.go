@@ -20,7 +20,7 @@ var DiscordModule modules.Module = modules.Module{RenderFunction: func(im *image
 	if firstFrame {
 		firstFrame = false
 		var err error
-		discordSession, err = discordgo.New("Bot " + config.DiscordAuthToken)
+		discordSession, err = discordgo.New("Bot " + config.Config.DiscordAuthToken)
 		utils.CheckError(err)
 		discordSession.StateEnabled = true
 		discordSession.State.TrackChannels = true
@@ -41,9 +41,9 @@ var DiscordModule modules.Module = modules.Module{RenderFunction: func(im *image
 	dc.SetFontFace(renderer.SmallFont)
 	foundPresence := false
 	for _, o := range discordSession.State.Guilds {
-		if o.ID == config.DiscordGuildID {
+		if o.ID == config.Config.DiscordGuildID {
 			for _, u := range o.Presences {
-				if u.User.ID == config.DiscordUserID {
+				if u.User.ID == config.Config.DiscordUserID {
 					foundPresence = true
 					if len(u.Activities) > 0 {
 						currentActivity := u.Activities[len(u.Activities)-1]
@@ -56,8 +56,8 @@ var DiscordModule modules.Module = modules.Module{RenderFunction: func(im *image
 							textOffset = 14
 							dc.DrawStringAnchored(currentActivity.Name, 4, 2, 0, 1)
 						}
-						dc.DrawStringWrapped(currentActivity.State, 4, 2+textOffset, 0, 0, float64(config.CanvasRenderDimensions.X)-8, 1, gg.AlignLeft)
-						dc.DrawStringWrapped(currentActivity.Details, 4, 16+textOffset, 0, 0, float64(config.CanvasRenderDimensions.X)-8, 1, gg.AlignLeft)
+						dc.DrawStringWrapped(currentActivity.State, 4, 2+textOffset, 0, 0, float64(config.Config.CanvasRenderDimensions.X)-8, 1, gg.AlignLeft)
+						dc.DrawStringWrapped(currentActivity.Details, 4, 16+textOffset, 0, 0, float64(config.Config.CanvasRenderDimensions.X)-8, 1, gg.AlignLeft)
 					}
 				}
 			}

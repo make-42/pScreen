@@ -34,7 +34,7 @@ var CurrentState State
 var IsInit = false
 
 func predictPaddleY(state State, paddleIndex int) float64 {
-	for !(state.Ball.Position.X < config.PongPaddleDistFromEdge+config.PongBallRadius || state.Ball.Position.X > float64(config.CanvasRenderDimensions.X)-config.PongPaddleDistFromEdge-config.PongBallRadius) && !state.Break {
+	for !(state.Ball.Position.X < config.Config.PongPaddleDistFromEdge+config.Config.PongBallRadius || state.Ball.Position.X > float64(config.Config.CanvasRenderDimensions.X)-config.Config.PongPaddleDistFromEdge-config.Config.PongBallRadius) && !state.Break {
 		state = updateState(state, false, false, paddleIndex)
 	}
 	return state.Ball.Position.Y
@@ -43,41 +43,41 @@ func predictPaddleY(state State, paddleIndex int) float64 {
 func updateState(state State, predictPaddleMovement bool, resetStateOnGameOver bool, paddleIndex int) State {
 	state.Ball.Position.X += state.Ball.Velocity.X
 	state.Ball.Position.Y += state.Ball.Velocity.Y
-	if state.Ball.Position.Y < config.PongBallRadius || state.Ball.Position.Y > float64(config.CanvasRenderDimensions.Y)-config.PongBallRadius {
+	if state.Ball.Position.Y < config.Config.PongBallRadius || state.Ball.Position.Y > float64(config.Config.CanvasRenderDimensions.Y)-config.Config.PongBallRadius {
 		state.Ball.Velocity.Y = -state.Ball.Velocity.Y
 	}
 	if predictPaddleMovement {
 		for i, paddle := range CurrentState.Paddles {
 			if (i == 0 && state.Ball.Velocity.X < 0) || (i == 1 && state.Ball.Velocity.X > 0) {
 				paddlePredictedY := predictPaddleY(state, i)
-				paddlePredictedY = math.Max(math.Min(float64(config.CanvasRenderDimensions.Y)-config.PongPaddleLength/2, paddlePredictedY), config.PongPaddleLength/2)
+				paddlePredictedY = math.Max(math.Min(float64(config.Config.CanvasRenderDimensions.Y)-config.Config.PongPaddleLength/2, paddlePredictedY), config.Config.PongPaddleLength/2)
 				state.Paddles[i].PID.Update(pid.ControllerInput{
 					ReferenceSignal:  paddlePredictedY,
 					ActualSignal:     paddle.Position.Y,
-					SamplingInterval: 1000 * time.Millisecond * 4 / config.PongTimestepsPerFrame,
+					SamplingInterval: time.Millisecond * time.Duration(1000*4/config.Config.PongTimestepsPerFrame),
 				})
-				state.Paddles[i].Position.Y = state.Paddles[i].Position.Y + 4/float64(config.PongTimestepsPerFrame)*config.PongPaddleVelocity*state.Paddles[i].PID.State.ControlSignal
+				state.Paddles[i].Position.Y = state.Paddles[i].Position.Y + 4/float64(config.Config.PongTimestepsPerFrame)*config.Config.PongPaddleVelocity*state.Paddles[i].PID.State.ControlSignal
 				var collisionPaddlePosition utils.CoordsFloat
 				if i == 0 {
-					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.PongPaddleInvisibleWidth - config.PongPaddleWidth/2, Y: paddle.Position.Y - config.PongPaddleLength/2}
+					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.Config.PongPaddleInvisibleWidth - config.Config.PongPaddleWidth/2, Y: paddle.Position.Y - config.Config.PongPaddleLength/2}
 				} else {
-					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.PongPaddleWidth/2, Y: paddle.Position.Y - config.PongPaddleLength/2}
+					collisionPaddlePosition = utils.CoordsFloat{X: paddle.Position.X - config.Config.PongPaddleWidth/2, Y: paddle.Position.Y - config.Config.PongPaddleLength/2}
 				}
-				if utils.IsPointInRectangle(collisionPaddlePosition, config.PongPaddleWidth+config.PongPaddleInvisibleWidth, config.PongPaddleLength, state.Ball.Position, config.PongBallRadius) {
+				if utils.IsPointInRectangle(collisionPaddlePosition, config.Config.PongPaddleWidth+config.Config.PongPaddleInvisibleWidth, config.Config.PongPaddleLength, state.Ball.Position, config.Config.PongBallRadius) {
 					state.Ball.Velocity.X = -state.Ball.Velocity.X
-					state.Ball.Position.X = math.Max(math.Min(state.Ball.Position.X, float64(config.CanvasRenderDimensions.X)-config.PongPaddleDistFromEdge-config.PongPaddleWidth/2), config.PongPaddleDistFromEdge+config.PongPaddleWidth/2)
+					state.Ball.Position.X = math.Max(math.Min(state.Ball.Position.X, float64(config.Config.CanvasRenderDimensions.X)-config.Config.PongPaddleDistFromEdge-config.Config.PongPaddleWidth/2), config.Config.PongPaddleDistFromEdge+config.Config.PongPaddleWidth/2)
 				}
 			}
 		}
 	} else {
 		bounce := false
-		if state.Ball.Position.X > float64(config.CanvasRenderDimensions.X)-config.PongPaddleDistFromEdge-config.PongPaddleWidth/2 {
+		if state.Ball.Position.X > float64(config.Config.CanvasRenderDimensions.X)-config.Config.PongPaddleDistFromEdge-config.Config.PongPaddleWidth/2 {
 			bounce = true
 			if paddleIndex == 1 {
 				state.Break = true
 			}
 		}
-		if state.Ball.Position.X < config.PongPaddleDistFromEdge+config.PongPaddleWidth/2 {
+		if state.Ball.Position.X < config.Config.PongPaddleDistFromEdge+config.Config.PongPaddleWidth/2 {
 			bounce = true
 			if paddleIndex == 0 {
 				state.Break = true
@@ -85,11 +85,11 @@ func updateState(state State, predictPaddleMovement bool, resetStateOnGameOver b
 		}
 		if bounce {
 			state.Ball.Velocity.X = -state.Ball.Velocity.X
-			state.Ball.Position.X = math.Max(math.Min(state.Ball.Position.X, float64(config.CanvasRenderDimensions.X)-config.PongPaddleDistFromEdge-config.PongPaddleWidth/2), config.PongPaddleDistFromEdge+config.PongPaddleWidth/2)
+			state.Ball.Position.X = math.Max(math.Min(state.Ball.Position.X, float64(config.Config.CanvasRenderDimensions.X)-config.Config.PongPaddleDistFromEdge-config.Config.PongPaddleWidth/2), config.Config.PongPaddleDistFromEdge+config.Config.PongPaddleWidth/2)
 		}
 	}
 	if resetStateOnGameOver {
-		if state.Ball.Position.X < 0 || state.Ball.Position.X > float64(config.CanvasRenderDimensions.X) {
+		if state.Ball.Position.X < 0 || state.Ball.Position.X > float64(config.Config.CanvasRenderDimensions.X) {
 			return resetState()
 		}
 	}
@@ -102,38 +102,38 @@ func resetState() State {
 	return State{
 		Ball: Ball{
 			Position: utils.CoordsFloat{
-				X: float64(config.CanvasRenderDimensions.X) / 2,
-				Y: float64(config.CanvasRenderDimensions.Y) / 2,
+				X: float64(config.Config.CanvasRenderDimensions.X) / 2,
+				Y: float64(config.Config.CanvasRenderDimensions.Y) / 2,
 			},
 			Velocity: utils.CoordsFloat{
-				X: math.Cos(angle) * config.PongBallVelocity * 4 / float64(config.PongTimestepsPerFrame),
-				Y: -math.Sin(angle) * config.PongBallVelocity * 4 / float64(config.PongTimestepsPerFrame),
+				X: math.Cos(angle) * config.Config.PongBallVelocity * 4 / float64(config.Config.PongTimestepsPerFrame),
+				Y: -math.Sin(angle) * config.Config.PongBallVelocity * 4 / float64(config.Config.PongTimestepsPerFrame),
 			},
 		},
 		Paddles: [2]Paddle{
 			{
 				Position: utils.CoordsFloat{
-					X: config.PongPaddleDistFromEdge,
-					Y: rand.Float64()*(float64(config.CanvasRenderDimensions.Y)-config.PongPaddleLength) + config.PongPaddleLength/2,
+					X: config.Config.PongPaddleDistFromEdge,
+					Y: rand.Float64()*(float64(config.Config.CanvasRenderDimensions.Y)-config.Config.PongPaddleLength) + config.Config.PongPaddleLength/2,
 				},
 				PID: pid.Controller{
 					Config: pid.ControllerConfig{
-						ProportionalGain: config.PongPaddleP,
-						IntegralGain:     config.PongPaddleI,
-						DerivativeGain:   config.PongPaddleD,
+						ProportionalGain: config.Config.PongPaddleP,
+						IntegralGain:     config.Config.PongPaddleI,
+						DerivativeGain:   config.Config.PongPaddleD,
 					},
 				},
 			},
 			{
 				Position: utils.CoordsFloat{
-					X: float64(config.CanvasRenderDimensions.X) - config.PongPaddleDistFromEdge,
-					Y: rand.Float64()*(float64(config.CanvasRenderDimensions.Y)-config.PongPaddleLength) + config.PongPaddleLength/2,
+					X: float64(config.Config.CanvasRenderDimensions.X) - config.Config.PongPaddleDistFromEdge,
+					Y: rand.Float64()*(float64(config.Config.CanvasRenderDimensions.Y)-config.Config.PongPaddleLength) + config.Config.PongPaddleLength/2,
 				},
 				PID: pid.Controller{
 					Config: pid.ControllerConfig{
-						ProportionalGain: config.PongPaddleP,
-						IntegralGain:     config.PongPaddleI,
-						DerivativeGain:   config.PongPaddleD,
+						ProportionalGain: config.Config.PongPaddleP,
+						IntegralGain:     config.Config.PongPaddleI,
+						DerivativeGain:   config.Config.PongPaddleD,
 					},
 				},
 			},
@@ -147,17 +147,17 @@ var PongModule modules.Module = modules.Module{RenderFunction: func(im *image.RG
 		CurrentState = resetState()
 		IsInit = true
 	}
-	for i := 0; i < config.PongTimestepsPerFrame; i++ {
+	for i := 0; i < config.Config.PongTimestepsPerFrame; i++ {
 		CurrentState = updateState(CurrentState, true, true, -1)
 	}
 	dc := gg.NewContextForRGBA(im)
 	dc.SetRGB(0, 0, 0)
 	dc.Clear()
 	dc.SetRGB(1, 1, 1)
-	dc.DrawRectangle(CurrentState.Ball.Position.X-config.PongBallRadius, CurrentState.Ball.Position.Y-config.PongBallRadius, config.PongBallRadius*2, config.PongBallRadius*2)
+	dc.DrawRectangle(CurrentState.Ball.Position.X-config.Config.PongBallRadius, CurrentState.Ball.Position.Y-config.Config.PongBallRadius, config.Config.PongBallRadius*2, config.Config.PongBallRadius*2)
 	dc.Fill()
 	for _, paddle := range CurrentState.Paddles {
-		dc.DrawRectangle(paddle.Position.X-config.PongPaddleWidth/2, paddle.Position.Y-config.PongPaddleLength/2, config.PongPaddleWidth, config.PongPaddleLength)
+		dc.DrawRectangle(paddle.Position.X-config.Config.PongPaddleWidth/2, paddle.Position.Y-config.Config.PongPaddleLength/2, config.Config.PongPaddleWidth, config.Config.PongPaddleLength)
 		dc.Fill()
 	}
 	return renderer.RemoveAntiAliasing(im)

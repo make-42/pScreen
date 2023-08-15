@@ -15,16 +15,16 @@ var CompressedBytesN = -1
 
 func EncodeFrameToBytes(im *image.RGBA) []byte {
 	var uncompressedBytes []byte
-	if config.RGBXMit {
-		for x := 0; x < config.CanvasRenderDimensions.X; x++ {
-			for y := 0; y < config.CanvasRenderDimensions.Y; y++ {
+	if config.Config.RGBXMit {
+		for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
+			for y := 0; y < config.Config.CanvasRenderDimensions.Y; y++ {
 				rgba := im.RGBAAt(x, y)
 				uncompressedBytes = append(uncompressedBytes, byte(rgba.R), byte(rgba.G), byte(rgba.B))
 			}
 		}
 	} else {
-		for x := 0; x < config.CanvasRenderDimensions.X; x++ {
-			for y := 0; y < config.CanvasRenderDimensions.Y/8; y++ {
+		for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
+			for y := 0; y < config.Config.CanvasRenderDimensions.Y/8; y++ {
 				currentByte := byte(0)
 				for z := 0; z < 8; z++ {
 					rgba := im.RGBAAt(x, y*8+z)

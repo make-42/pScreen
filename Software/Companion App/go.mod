@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/bubbletea v0.24.2
 	github.com/disintegration/imaging v1.6.2
 	github.com/godbus/dbus v4.1.0+incompatible
+	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/make-42/go-notifications v0.3.0
@@ -17,9 +18,11 @@ require (
 	github.com/pbnjay/pixfont v0.0.0-20200714042608-33b744692567
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
+	github.com/vishalkuo/bimap v0.0.0-20230512162637-a5362d2f581f
 	go.bug.st/serial v1.5.0
 	go.einride.tech/pid v0.1.1
 	golang.org/x/image v0.8.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (

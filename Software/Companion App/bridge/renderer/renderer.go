@@ -63,14 +63,14 @@ func LoadRendererSharedRessources() {
 
 func RenderFrame(mod modules.Module) []byte {
 	upLeft := image.Point{0, 0}
-	lowRight := image.Point{config.CanvasRenderDimensions.X, config.CanvasRenderDimensions.Y}
+	lowRight := image.Point{config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y}
 	im := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	im = mod.RenderFunction(im)
-	if config.DebugSaveScreen {
+	if config.Config.DebugSaveScreen {
 		f, _ := os.Create("image.png")
 		png.Encode(f, im)
 	}
-	if config.RotateScreen180Deg {
+	if config.Config.RotateScreen180Deg {
 		im = RotateImage180deg(im)
 	}
 	return encoder.EncodeFrameToBytes(im)
@@ -96,7 +96,7 @@ func YCbCrImgToRGBAImg(im *image.YCbCr) *image.RGBA {
 }
 
 func RemoveAntiAliasing(im *image.RGBA) *image.RGBA {
-	if config.RGBXMit {
+	if config.Config.RGBXMit {
 		return im
 	}
 	return NRGBAImgToRGBAImg(imaging.AdjustContrast(im, 127))
@@ -108,7 +108,7 @@ func CompositeBackgroundAndForeground(bgImg *image.RGBA, fgImg *image.RGBA) *ima
 	draw.Draw(m, m.Bounds(), bgImg, ba.Min, draw.Src)
 	fgBorder := NRGBAImgToRGBAImg(imaging.Invert(imaging.AdjustContrast(imaging.AdjustBrightness(imaging.Blur(fgImg, 1), 40), 127)))
 	b := fgBorder.Bounds()
-	if config.RGBXMit {
+	if config.Config.RGBXMit {
 		for x := 0; x < b.Dx(); x++ {
 			for y := 0; y < b.Dy(); y++ {
 				if (fgBorder.RGBAAt(x, y) != color.RGBA{255, 255, 255, 255}) {
@@ -138,7 +138,7 @@ func CompositeBackgroundAndForeground(bgImg *image.RGBA, fgImg *image.RGBA) *ima
 }
 
 func AddWallpaperToFrame(fgImg *image.RGBA) *image.RGBA {
-	if !config.UseWallpaper {
+	if !config.Config.UseWallpaper {
 		return fgImg
 	}
 	b := fgImg.Bounds()

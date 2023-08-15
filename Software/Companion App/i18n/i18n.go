@@ -78,7 +78,7 @@ func LoadLanguageStrings(languageString string) {
 
 var en_US = LanguageStrings{
 	Headers: HeaderStrings{
-		MainPageHeader:           "Configuration",
+		MainPageHeader:           "Config",
 		AddModulePageHeader:      "Add module",
 		BridgeSettingsPageHeader: "Bridge settings",
 	},

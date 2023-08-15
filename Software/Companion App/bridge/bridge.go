@@ -16,7 +16,6 @@ import (
 	"pscreenapp/bridge/renderer"
 	"pscreenapp/config"
 	"pscreenapp/constants"
-	"pscreenapp/utils"
 	"runtime"
 	"time"
 
@@ -25,18 +24,16 @@ import (
 )
 
 type bridgeData struct {
-	LoadedModules       []int
-	DelayBetweenModules int
-	ModuleDisplayStart  int64
-	CurrentModule       int
-	DetectedPorts       []*enumerator.PortDetails
-	CommsReady          bool
+	LoadedModules      []int
+	ModuleDisplayStart int64
+	CurrentModule      int
+	DetectedPorts      []*enumerator.PortDetails
+	CommsReady         bool
 }
 
 var BridgeData = bridgeData{
-	LoadedModules:       []int{constants.MediaModuleID},
-	DelayBetweenModules: config.DelayBetweenModules,
-	CommsReady:          false,
+	LoadedModules: []int{},
+	CommsReady:    false,
 }
 var Port serial.Port
 var FrameDeltaTime int64
@@ -47,20 +44,19 @@ func BridgeStartXMit() {
 }
 
 func BridgeEnumSerialDevices() {
-	var err error
-	BridgeData.DetectedPorts, err = enumerator.GetDetailedPortsList()
-	utils.CheckError(err)
+	BridgeData.DetectedPorts = comms.EnumSerialDevices()
 }
 
 func BridgeMainThread() {
+	BridgeData.LoadedModules = config.ModuleConfigNamesToIDs(config.Config.LoadedModules)
 	if runtime.GOOS == "linux" {
-		if (config.UseNotificationsModule) && (!notifications.CurrentModuleState.ReceivingNotifications) {
+		if (config.Config.UseNotificationsModule) && (!notifications.CurrentModuleState.ReceivingNotifications) {
 			go notifications.ListenForNotifications()
 		}
 	}
 	lastFrameT := time.Now().UnixNano()
 	for {
-		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(BridgeData.DelayBetweenModules)*1000 {
+		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(config.Config.ChangeModuleEveryXMilliseconds) {
 			BridgeData.ModuleDisplayStart = time.Now().UTC().UnixMilli()
 			if BridgeData.CurrentModule < len(BridgeData.LoadedModules)-1 {
 				BridgeData.CurrentModule++
@@ -72,7 +68,7 @@ func BridgeMainThread() {
 		if BridgeData.CommsReady {
 			comms.SendBytes(Port, frameBytes)
 		}
-		time.Sleep(time.Millisecond*config.RenderDeviceScreenEveryXMilliseconds - time.Nanosecond*time.Duration(time.Now().UnixNano()-lastFrameT))
+		time.Sleep(time.Millisecond*time.Duration(config.Config.RenderDeviceScreenEveryXMilliseconds) - time.Nanosecond*time.Duration(time.Now().UnixNano()-lastFrameT))
 		FrameDeltaTime = time.Now().UnixNano() - lastFrameT
 		lastFrameT = time.Now().UnixNano()
 	}
