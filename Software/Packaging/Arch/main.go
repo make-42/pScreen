@@ -54,7 +54,7 @@ build() {
 }
 	
 package() {
-	install -Dm755 "${srcdir}/${_pkgbase}/Software/Companion App/${_pkgbase}" "${_pkgbase}/usr/bin/${_pkgbase}"
+	install -Dm755 "${srcdir}/${_pkgbase}/Software/Companion App/${_pkgbase}" "${pkgdir}"/usr/bin/${_pkgbase}
 }`, revCount[:len(revCount)-1], commitHash[:len(commitHash)-1])
 	err = os.WriteFile("PKGBUILD", []byte(output), 0644)
 	checkError(err)
