@@ -13,6 +13,7 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/make-42/go-notifications v0.3.0
 	github.com/makeworld-the-better-one/dither/v2 v2.3.0
+	github.com/moutend/go-hook v0.1.0
 	github.com/muesli/termenv v0.15.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pbnjay/pixfont v0.0.0-20200714042608-33b744692567
@@ -21,6 +22,8 @@ require (
 	github.com/vishalkuo/bimap v0.0.0-20230512162637-a5362d2f581f
 	go.bug.st/serial v1.5.0
 	go.einride.tech/pid v0.1.1
+	golang.design/x/hotkey v0.4.1
+	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
 	golang.org/x/image v0.8.0
 	gopkg.in/yaml.v3 v3.0.1
 )

@@ -2,6 +2,7 @@ package renderer
 
 import (
 	"embed"
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -19,6 +20,8 @@ import (
 	"github.com/pbnjay/pixfont"
 	"golang.org/x/image/font"
 )
+
+var SavedFrames int
 
 //go:embed assets/fonts/iosevka-heavy.ttf
 //go:embed assets/fonts/iosevka-medium.ttf
@@ -67,8 +70,9 @@ func RenderFrame(mod modules.Module) []byte {
 	im := image.NewRGBA(image.Rectangle{upLeft, lowRight})
 	im = mod.RenderFunction(im)
 	if config.Config.DebugSaveScreen {
-		f, _ := os.Create("image.png")
+		f, _ := os.Create(fmt.Sprintf("frame-%04d.png", SavedFrames))
 		png.Encode(f, im)
+		SavedFrames++
 	}
 	if config.Config.RotateScreen180Deg {
 		im = RotateImage180deg(im)

@@ -52,6 +52,11 @@ type config struct {
 	MediaProgressBarWaveScale       float64
 	MediaProgressBarIndicatorRadius int
 
+	// osu! module
+	OsuTrackedKeys           []uint16 // see https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+	OsuTrackedKeysLabels     []string
+	OsuTrackedKeysDimensions utils.Coords
+
 	// Pong module
 	PongBallVelocity         float64
 	PongBallRadius           float64
@@ -131,6 +136,11 @@ var DefaultConfig = config{
 	MediaProgressBarHeight:          8,
 	MediaProgressBarWaveScale:       0.1,
 	MediaProgressBarIndicatorRadius: 4,
+
+	// osu! module
+	OsuTrackedKeys:           []uint16{0x57, 0x58},
+	OsuTrackedKeysLabels:     []string{"w", "x"},
+	OsuTrackedKeysDimensions: utils.Coords{X: 32, Y: 48},
 
 	// Pong module
 	PongBallVelocity:         2.0,

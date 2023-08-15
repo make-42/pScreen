@@ -9,6 +9,7 @@ import (
 	"pscreen/bridge/modules/media"
 	"pscreen/bridge/modules/monitor"
 	"pscreen/bridge/modules/notifications"
+	"pscreen/bridge/modules/osu"
 	"pscreen/bridge/modules/pong"
 	"pscreen/bridge/modules/qrcode"
 	"pscreen/bridge/modules/screensaver"
@@ -93,6 +94,8 @@ func ReturnCurrentModule() modules.Module {
 			return media.MediaModule
 		case constants.MonitorModuleID:
 			return monitor.MonitorModule
+		case constants.OsuModuleID:
+			return osu.OsuModule
 		case constants.PongModuleID:
 			return pong.PongModule
 		case constants.QRCodeModuleID:

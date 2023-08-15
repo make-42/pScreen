@@ -81,15 +81,16 @@ func UpdateMediaArt(mediaArtURL string) {
 			utils.CheckError(err)
 			bgTImg := resize.Resize(uint(utils.Min(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
 			bgBImg := resize.Resize(uint(utils.Max(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
-			palette := []color.Color{
-				color.Black,
-				color.White,
-			}
-			d := dither.NewDitherer(palette)
-			//d.Mapper = dither.Bayer(2, 2, 1.0)
-			d.Matrix = dither.FloydSteinberg
+
 			bgBImg = renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10))
 			if !config.Config.RGBXMit {
+				palette := []color.Color{
+					color.Black,
+					color.White,
+				}
+				d := dither.NewDitherer(palette)
+				//d.Mapper = dither.Bayer(2, 2, 1.0)
+				d.Matrix = dither.FloydSteinberg
 				bgBImg = d.Dither(bgBImg)
 				bgTImg = d.Dither(bgTImg)
 			} else {
