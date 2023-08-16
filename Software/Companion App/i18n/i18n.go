@@ -6,6 +6,7 @@ type ModuleStrings struct {
 	BlankModule       string
 	ClockModule       string
 	DiscordModule     string
+	DVDModule         string
 	MediaModule       string
 	MonitorModule     string
 	OsuModule         string
@@ -23,6 +24,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.ClockModule
 	case constants.DiscordModuleID:
 		return I18n.Modules.DiscordModule
+	case constants.DVDModuleID:
+		return I18n.Modules.DVDModule
 	case constants.MediaModuleID:
 		return I18n.Modules.MediaModule
 	case constants.MonitorModuleID:
@@ -88,6 +91,7 @@ var en_US = LanguageStrings{
 	Modules: ModuleStrings{BlankModule: "Blank",
 		ClockModule:       "Clock",
 		DiscordModule:     "Discord",
+		DVDModule:         "DVD",
 		MediaModule:       "Media",
 		MonitorModule:     "Monitor",
 		OsuModule:         "osu!",
@@ -119,6 +123,7 @@ var fr_FR = LanguageStrings{
 		BlankModule:       "Vide",
 		ClockModule:       "Horloge",
 		DiscordModule:     "Discord",
+		DVDModule:         "DVD",
 		MediaModule:       "Média",
 		MonitorModule:     "Moniteur",
 		OsuModule:         "osu!",

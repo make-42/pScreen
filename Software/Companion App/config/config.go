@@ -94,6 +94,9 @@ type config struct {
 	DiscordAuthToken string
 	DiscordGuildID   string
 	DiscordUserID    string
+
+	// DVD module
+	DVDLogoVelocity float64
 }
 
 var DefaultConfig = config{
@@ -179,6 +182,9 @@ var DefaultConfig = config{
 	DiscordAuthToken: "TOKEN",
 	DiscordGuildID:   "XXXXXXXXXXXXXXXXXX",
 	DiscordUserID:    "XXXXXXXXXXXXXXXXXX",
+
+	// DVD module
+	DVDLogoVelocity: 1.0,
 }
 
 var Config config

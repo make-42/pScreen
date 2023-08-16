@@ -1,11 +1,8 @@
 package osu
 
 import (
-	"fmt"
 	"image"
 	"image/color"
-	"os"
-	"os/signal"
 	"pscreen/bridge/modules"
 	"pscreen/bridge/renderer"
 	"pscreen/config"
@@ -35,29 +32,20 @@ func keyTrackingThread(receptChan chan struct {
 
 	defer keyboard.Uninstall()
 
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan, os.Interrupt)
-
-	fmt.Println("start capturing keyboard input")
-
 	for {
-		select {
-		case <-signalChan:
-			fmt.Println("Received shutdown signal")
-		case k := <-keyboardChan:
-			if slices.Contains(config.Config.OsuTrackedKeys, uint16(k.VKCode)) {
-				if k.Message == types.WM_KEYDOWN {
-					receptChan <- struct {
-						uint16
-						bool
-					}{uint16(k.VKCode), true}
-				}
-				if k.Message == types.WM_KEYUP {
-					receptChan <- struct {
-						uint16
-						bool
-					}{uint16(k.VKCode), false}
-				}
+		k := <-keyboardChan
+		if slices.Contains(config.Config.OsuTrackedKeys, uint16(k.VKCode)) {
+			if k.Message == types.WM_KEYDOWN {
+				receptChan <- struct {
+					uint16
+					bool
+				}{uint16(k.VKCode), true}
+			}
+			if k.Message == types.WM_KEYUP {
+				receptChan <- struct {
+					uint16
+					bool
+				}{uint16(k.VKCode), false}
 			}
 		}
 	}

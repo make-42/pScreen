@@ -26,6 +26,7 @@ var SavedFrames int
 //go:embed assets/fonts/iosevka-heavy.ttf
 //go:embed assets/fonts/iosevka-medium.ttf
 //go:embed assets/img/bg.png
+//go:embed assets/img/DVD_logo.png
 //go:embed assets/gif/komi-san-48.gif
 var assetsFolder embed.FS
 
@@ -36,6 +37,7 @@ var MedSmallerFont font.Face
 var SmallFont font.Face
 var TinyFont font.Face
 var BackgroundImage image.Image
+var DVDLogo image.Image
 var QRCodeModuleGIF *gif.GIF
 
 func LoadRendererSharedRessources() {
@@ -56,6 +58,11 @@ func LoadRendererSharedRessources() {
 	defer imgFile.Close()
 	utils.CheckError(err)
 	BackgroundImage, _, err = image.Decode(imgFile)
+	utils.CheckError(err)
+	dvdImgFile, err := assetsFolder.Open("assets/img/DVD_logo.png")
+	defer dvdImgFile.Close()
+	utils.CheckError(err)
+	DVDLogo, _, err = image.Decode(dvdImgFile)
 	utils.CheckError(err)
 	gifFile, err := assetsFolder.Open("assets/gif/komi-san-48.gif")
 	defer gifFile.Close()
