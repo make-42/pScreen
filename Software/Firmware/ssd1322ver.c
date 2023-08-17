@@ -18,7 +18,7 @@ u8g2_t u8g2;
 #define PIN_CS 21
 #define PIN_SCK 18
 #define PIN_MOSI 19
-#define SPI_SPEED 4000 * 1000
+#define SPI_SPEED 4096 * 7500
 #define PIN_DC 15
 #define PIN_RST 14
 

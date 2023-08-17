@@ -115,7 +115,7 @@ var DefaultConfig = config{
 
 	AutoStartXMit:           false,
 	DefaultPortSerialNumber: "",
-	SerialPortBaudRate:      115200,
+	SerialPortBaudRate:      921600,
 	RGBXMit:                 false,
 
 	I18nLanguage: "en_US",
