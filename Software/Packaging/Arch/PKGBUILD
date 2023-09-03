@@ -1,7 +1,7 @@
 # Maintainer: Louis Dalibard <louis.dalibard@gmail.com>
 _pkgbase="pscreen"
 pkgname="$_pkgbase-git"
-pkgver=r42.ga40c813
+pkgver=r48.g5311a14
 pkgrel=1
 pkgdesc="A companion app for the pScreen desktop clock"
 arch=("x86_64" "armv7h" "aarch64")
