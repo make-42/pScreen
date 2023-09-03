@@ -31,6 +31,8 @@ type bridgeData struct {
 	CurrentModule      int
 	DetectedPorts      []*enumerator.PortDetails
 	CommsReady         bool
+	TimeOfSwitch       int64
+	LastMod            modules.Module
 }
 
 var BridgeData = bridgeData{
@@ -60,13 +62,14 @@ func BridgeMainThread() {
 	for {
 		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(config.Config.ChangeModuleEveryXMilliseconds) {
 			BridgeData.ModuleDisplayStart = time.Now().UTC().UnixMilli()
-			if BridgeData.CurrentModule < len(BridgeData.LoadedModules)-1 {
-				BridgeData.CurrentModule++
-			} else {
-				BridgeData.CurrentModule = 0
+			BridgeData.LastMod = ReturnCurrentModule()
+			lastModuleID := BridgeData.LoadedModules[BridgeData.CurrentModule]
+			BridgeData.CurrentModule = (BridgeData.CurrentModule + 1) % len(BridgeData.LoadedModules)
+			if BridgeData.LoadedModules[BridgeData.CurrentModule] != lastModuleID {
+				BridgeData.TimeOfSwitch = time.Now().UTC().UnixMilli()
 			}
 		}
-		frameBytes := renderer.RenderFrame(ReturnCurrentModule())
+		frameBytes := renderer.RenderFrame(ReturnCurrentModule(), BridgeData.LastMod, BridgeData.TimeOfSwitch)
 		if BridgeData.CommsReady {
 			comms.SendBytes(Port, frameBytes)
 		}

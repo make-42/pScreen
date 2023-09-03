@@ -6,6 +6,7 @@ require (
 	git.sr.ht/~sbinet/gg v0.5.0
 	github.com/bwmarrin/discordgo v0.27.1
 	github.com/charmbracelet/bubbletea v0.24.2
+	github.com/creasty/go-easing v0.0.0-20161107103139-0cfd96d3a544
 	github.com/disintegration/imaging v1.6.2
 	github.com/godbus/dbus v4.1.0+incompatible
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
@@ -22,7 +23,6 @@ require (
 	github.com/vishalkuo/bimap v0.0.0-20230512162637-a5362d2f581f
 	go.bug.st/serial v1.5.0
 	go.einride.tech/pid v0.1.1
-	golang.design/x/hotkey v0.4.1
 	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb
 	golang.org/x/image v0.8.0
 	gopkg.in/yaml.v3 v3.0.1

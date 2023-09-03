@@ -8,15 +8,19 @@ import (
 	"image/draw"
 	"image/gif"
 	"image/png"
+	"math"
 	"os"
 	"pscreen/bridge/encoder"
 	"pscreen/bridge/modules"
 	"pscreen/config"
 	"pscreen/utils"
 	"strings"
+	"time"
 
 	"git.sr.ht/~sbinet/gg"
+	"github.com/creasty/go-easing"
 	"github.com/disintegration/imaging"
+	"github.com/makeworld-the-better-one/dither/v2"
 	"github.com/pbnjay/pixfont"
 	"golang.org/x/image/font"
 )
@@ -71,11 +75,20 @@ func LoadRendererSharedRessources() {
 	utils.CheckError(err)
 }
 
-func RenderFrame(mod modules.Module) []byte {
+func RenderFrame(mod modules.Module, lastMod modules.Module, timeOfSwitch int64) []byte {
 	upLeft := image.Point{0, 0}
 	lowRight := image.Point{config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y}
 	im := image.NewRGBA(image.Rectangle{upLeft, lowRight})
-	im = mod.RenderFunction(im)
+
+	transitionAmount := math.Min(float64(time.Now().UTC().UnixMilli()-timeOfSwitch)/config.Config.TransitionMilliseconds, 1)
+	if transitionAmount < 0.5 {
+		im = lastMod.RenderFunction(im)
+		im = BlurImage(im, easing.Transition(0, config.Config.TransitionBlurringSigma, easing.QuadEaseInOut(transitionAmount*2)))
+	} else {
+		im = mod.RenderFunction(im)
+		im = BlurImage(im, easing.Transition(config.Config.TransitionBlurringSigma, 0, easing.QuadEaseInOut((transitionAmount-0.5)*2)))
+	}
+
 	if config.Config.DebugSaveScreen {
 		f, _ := os.Create(fmt.Sprintf("frame-%04d.png", SavedFrames))
 		png.Encode(f, im)
@@ -86,6 +99,25 @@ func RenderFrame(mod modules.Module) []byte {
 	}
 	return encoder.EncodeFrameToBytes(im)
 
+}
+
+func BlurImage(im *image.RGBA, sigma float64) *image.RGBA {
+	if sigma == 0 {
+		return im
+	}
+	im = NRGBAImgToRGBAImg(imaging.Blur(im, sigma))
+	if !config.Config.RGBXMit {
+		palette := []color.Color{
+			color.Black,
+			color.White,
+		}
+		d := dither.NewDitherer(palette)
+		//d.Mapper = dither.Bayer(2, 2, 1.0)
+		d.Matrix = dither.FloydSteinberg
+		return d.Dither(im).(*image.RGBA)
+	} else {
+		return im
+	}
 }
 
 func RotateImage180deg(im *image.RGBA) *image.RGBA {

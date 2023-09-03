@@ -19,6 +19,8 @@ type config struct {
 	ModulePersistance                    bool
 	ChangeModuleEveryXMilliseconds       int
 	RenderDeviceScreenEveryXMilliseconds int
+	TransitionMilliseconds               float64
+	TransitionBlurringSigma              float64
 
 	CanvasRenderDimensions utils.Coords
 	RotateScreen180Deg     bool
@@ -107,6 +109,8 @@ var DefaultConfig = config{
 	ModulePersistance:                    true,
 	ChangeModuleEveryXMilliseconds:       5000,
 	RenderDeviceScreenEveryXMilliseconds: 0,
+	TransitionMilliseconds:               400,
+	TransitionBlurringSigma:              10,
 
 	CanvasRenderDimensions: utils.Coords{X: 256, Y: 64},
 	RotateScreen180Deg:     false,
