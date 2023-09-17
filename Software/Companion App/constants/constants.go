@@ -15,11 +15,12 @@ const (
 	PongModuleID
 	QRCodeModuleID
 	ScreensaverModuleID
+	VisualizerModuleID
 	WeatherModuleID
 )
 
 var AllModules = []int{
-	BlankModuleID, ClockModuleID, DiscordModuleID, DVDModuleID, MediaModuleID, MonitorModuleID, OsuModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, WeatherModuleID,
+	BlankModuleID, ClockModuleID, DiscordModuleID, DVDModuleID, MediaModuleID, MonitorModuleID, OsuModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, VisualizerModuleID, WeatherModuleID,
 }
 
 var ModuleNames = bimap.NewBiMapFromMap[string, int](map[string]int{
@@ -33,6 +34,7 @@ var ModuleNames = bimap.NewBiMapFromMap[string, int](map[string]int{
 	"pong":        PongModuleID,
 	"qrcode":      QRCodeModuleID,
 	"screensaver": ScreensaverModuleID,
+	"visualizer":  VisualizerModuleID,
 	"weather":     WeatherModuleID,
 })
 

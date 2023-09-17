@@ -9,11 +9,13 @@ require (
 	github.com/creasty/go-easing v0.0.0-20161107103139-0cfd96d3a544
 	github.com/disintegration/imaging v1.6.2
 	github.com/godbus/dbus v4.1.0+incompatible
+	github.com/gordonklaus/portaudio v0.0.0-20180817120803-00e7307ccd93
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
 	github.com/make-42/go-notifications v0.3.0
 	github.com/makeworld-the-better-one/dither/v2 v2.3.0
+	github.com/mjibson/go-dsp v0.0.0-20180508042940-11479a337f12
 	github.com/moutend/go-hook v0.1.0
 	github.com/muesli/termenv v0.15.1
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646

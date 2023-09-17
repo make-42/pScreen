@@ -13,6 +13,7 @@ type ModuleStrings struct {
 	PongModule        string
 	QRCodeModule      string
 	ScreensaverModule string
+	VisualizerModule  string
 	WeatherModule     string
 }
 
@@ -38,6 +39,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.QRCodeModule
 	case constants.ScreensaverModuleID:
 		return I18n.Modules.ScreensaverModule
+	case constants.VisualizerModuleID:
+		return I18n.Modules.VisualizerModule
 	case constants.WeatherModuleID:
 		return I18n.Modules.WeatherModule
 	default:
@@ -98,6 +101,7 @@ var en_US = LanguageStrings{
 		PongModule:        "Pong",
 		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Screensaver",
+		VisualizerModule:  "Visualizer",
 		WeatherModule:     "Weather",
 	},
 	Keybinds: KeybindStrings{
@@ -130,6 +134,7 @@ var fr_FR = LanguageStrings{
 		PongModule:        "Pong",
 		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Économiseur d'écran",
+		VisualizerModule:  "Visualisateur",
 		WeatherModule:     "Météo",
 	},
 	Keybinds: KeybindStrings{

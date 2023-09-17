@@ -14,6 +14,7 @@ import (
 	"pscreen/bridge/modules/pong"
 	"pscreen/bridge/modules/qrcode"
 	"pscreen/bridge/modules/screensaver"
+	"pscreen/bridge/modules/visualizer"
 	"pscreen/bridge/modules/weather"
 	"pscreen/bridge/renderer"
 	"pscreen/config"
@@ -108,6 +109,8 @@ func ReturnCurrentModule() modules.Module {
 			return qrcode.QRCodeModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
+		case constants.VisualizerModuleID:
+			return visualizer.VisualizerModule
 		case constants.WeatherModuleID:
 			return weather.WeatherModule
 		}

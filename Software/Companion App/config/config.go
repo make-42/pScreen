@@ -99,6 +99,12 @@ type config struct {
 
 	// DVD module
 	DVDLogoVelocity float64
+
+	// Visualizer module
+	VisualizerSampleRate                 int
+	VisualizerSampleBufferSize           int
+	VisualizerCumulativeSampleBufferSize int
+	VisualizerShowFFT                    bool
 }
 
 var DefaultConfig = config{
@@ -189,6 +195,12 @@ var DefaultConfig = config{
 
 	// DVD module
 	DVDLogoVelocity: 1.0,
+
+	// Visualizer module
+	VisualizerSampleRate:                 44100,
+	VisualizerSampleBufferSize:           512,
+	VisualizerCumulativeSampleBufferSize: 2048,
+	VisualizerShowFFT:                    true,
 }
 
 var Config config
