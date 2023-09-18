@@ -4,12 +4,12 @@ go 1.18
 
 require (
 	git.sr.ht/~sbinet/gg v0.5.0
+	github.com/KarpelesLab/static-portaudio v0.4.190600
 	github.com/bwmarrin/discordgo v0.27.1
 	github.com/charmbracelet/bubbletea v0.24.2
 	github.com/creasty/go-easing v0.0.0-20161107103139-0cfd96d3a544
 	github.com/disintegration/imaging v1.6.2
 	github.com/godbus/dbus v4.1.0+incompatible
-	github.com/gordonklaus/portaudio v0.0.0-20180817120803-00e7307ccd93
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/leberKleber/go-mpris v1.1.0
 	github.com/lucasb-eyer/go-colorful v1.2.0

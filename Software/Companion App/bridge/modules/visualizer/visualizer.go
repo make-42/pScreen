@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"git.sr.ht/~sbinet/gg"
-	"github.com/gordonklaus/static-portaudio/portaudio"
+	"github.com/KarpelesLab/static-portaudio/portaudio"
 	"github.com/mjibson/go-dsp/fft"
 )
 
