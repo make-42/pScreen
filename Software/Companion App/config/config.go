@@ -101,6 +101,8 @@ type config struct {
 	DVDLogoVelocity float64
 
 	// Visualizer module
+	VisualizerUseMicrophone              bool
+	VisualizerInputDelayMillis           int
 	VisualizerSampleRate                 int
 	VisualizerSampleBufferSize           int
 	VisualizerCumulativeSampleBufferSize int
@@ -203,6 +205,8 @@ var DefaultConfig = config{
 	DVDLogoVelocity: 1.0,
 
 	// Visualizer module
+	VisualizerUseMicrophone:              false,
+	VisualizerInputDelayMillis:           0,
 	VisualizerSampleRate:                 44100,
 	VisualizerSampleBufferSize:           256,
 	VisualizerCumulativeSampleBufferSize: 4096,

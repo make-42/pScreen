@@ -29,10 +29,10 @@ func initMic() {
 	freeSampleBufferL = make([]float32, config.Config.VisualizerCumulativeSampleBufferSize)
 	freeSampleBufferR = make([]float32, config.Config.VisualizerCumulativeSampleBufferSize)
 	portaudio.Initialize()
+	var deviceOfInterest *portaudio.DeviceInfo
 	/*devs, err := portaudio.Devices()
 	utils.CheckError(err)
 
-	var deviceOfInterest *portaudio.DeviceInfo
 	/*fmt.Println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 	for _, device := range devs {
 		/*fmt.Println(device.Name, device.DefaultSampleRate, device.DefaultLowOutputLatency)
@@ -40,13 +40,18 @@ func initMic() {
 			deviceOfInterest = device
 		}
 	}*/
-	deviceOfInterest, err := portaudio.DefaultOutputDevice()
+	var err error
+	if config.Config.VisualizerUseMicrophone {
+		deviceOfInterest, err = portaudio.DefaultInputDevice()
+	} else {
+		deviceOfInterest, err = portaudio.DefaultOutputDevice()
+	}
 	utils.CheckError(err)
 	streamParameters := portaudio.StreamParameters{
 		Input: portaudio.StreamDeviceParameters{
 			Device:   deviceOfInterest,
 			Channels: 2,
-			Latency:  time.Millisecond * 0,
+			Latency:  time.Millisecond * time.Duration(config.Config.VisualizerInputDelayMillis),
 		},
 		SampleRate:      float64(config.Config.VisualizerSampleRate),
 		FramesPerBuffer: config.Config.VisualizerSampleBufferSize,
