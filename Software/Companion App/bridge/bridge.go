@@ -64,7 +64,10 @@ func BridgeMainThread() {
 		if time.Now().UTC().UnixMilli()-BridgeData.ModuleDisplayStart > int64(config.Config.ChangeModuleEveryXMilliseconds) {
 			BridgeData.ModuleDisplayStart = time.Now().UTC().UnixMilli()
 			BridgeData.LastMod = ReturnCurrentModule()
-			lastModuleID := BridgeData.LoadedModules[BridgeData.CurrentModule]
+			lastModuleID := constants.ClockModuleID
+			if len(BridgeData.LoadedModules) > 0 {
+				lastModuleID = BridgeData.LoadedModules[BridgeData.CurrentModule]
+			}
 			BridgeData.CurrentModule = (BridgeData.CurrentModule + 1) % len(BridgeData.LoadedModules)
 			if BridgeData.LoadedModules[BridgeData.CurrentModule] != lastModuleID {
 				BridgeData.TimeOfSwitch = time.Now().UTC().UnixMilli()
