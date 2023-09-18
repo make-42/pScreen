@@ -104,6 +104,12 @@ type config struct {
 	VisualizerSampleRate                 int
 	VisualizerSampleBufferSize           int
 	VisualizerCumulativeSampleBufferSize int
+	VisualizerScaleSmoothing             float64 // 0-1
+	VisualizerScale                      float64 // 0-1
+	VisualizerFFTCutoff                  float64
+	VisualizerFFTBarWidth                int
+	VisualizerFFTBarSpacing              int
+	VisualizerFFTSmoothing               float64 // 0-1
 	VisualizerShowFFT                    bool
 }
 
@@ -198,8 +204,14 @@ var DefaultConfig = config{
 
 	// Visualizer module
 	VisualizerSampleRate:                 44100,
-	VisualizerSampleBufferSize:           512,
-	VisualizerCumulativeSampleBufferSize: 2048,
+	VisualizerSampleBufferSize:           256,
+	VisualizerCumulativeSampleBufferSize: 4096,
+	VisualizerScaleSmoothing:             0.99, // 0-1
+	VisualizerScale:                      0.7,  // 0-1
+	VisualizerFFTCutoff:                  0.3,
+	VisualizerFFTBarWidth:                4,
+	VisualizerFFTBarSpacing:              1,
+	VisualizerFFTSmoothing:               0.8, // 0-1
 	VisualizerShowFFT:                    true,
 }
 

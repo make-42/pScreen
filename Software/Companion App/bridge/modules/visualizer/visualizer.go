@@ -20,6 +20,8 @@ var signals = make(chan bool)
 var easedMaxAbsSampleValue = 1.0
 var freeSampleBufferL []float32
 var freeSampleBufferR []float32
+var Y []float64
+var barCount = 0
 
 func initMic() {
 	var monoSampleBufferL = make([]float32, config.Config.VisualizerSampleBufferSize)
@@ -71,6 +73,8 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 	if firstFrame {
 		firstFrame = false
 		go initMic()
+		barCount = config.Config.CanvasRenderDimensions.X / (config.Config.VisualizerFFTBarSpacing + config.Config.VisualizerFFTBarWidth)
+		Y = make([]float64, barCount)
 	}
 	dc := gg.NewContextForRGBA(im)
 	dc.SetRGB(0, 0, 0)
@@ -94,11 +98,10 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 	}
 
 	var X []complex128
-	Y := make([]float64, config.Config.CanvasRenderDimensions.X)
 	if config.Config.VisualizerShowFFT {
 		X = fft.FFTReal(freeMergedSampleBuffer)
-		step := (config.Config.VisualizerCumulativeSampleBufferSize / config.Config.CanvasRenderDimensions.X) / 4
-		for i := 0; i < config.Config.CanvasRenderDimensions.X; i++ {
+		step := int(math.Round(float64(config.Config.VisualizerCumulativeSampleBufferSize) / float64(barCount) / 4 * float64(config.Config.VisualizerFFTCutoff)))
+		for i := 0; i < barCount; i++ {
 			dist := 0.0
 			for j := 0; j < step; j++ {
 				index := config.Config.VisualizerCumulativeSampleBufferSize/2 + i*step + j
@@ -107,23 +110,29 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 			if maxAbsSampleValue < dist {
 				maxAbsSampleValue = dist
 			}
-			Y[i] = dist
+			Y[i] = dist*(1-config.Config.VisualizerFFTSmoothing) + Y[i]*config.Config.VisualizerFFTSmoothing
 		}
 	}
 
-	easedMaxAbsSampleValue = easedMaxAbsSampleValue*0.95 + maxAbsSampleValue*0.05
+	easedMaxAbsSampleValue = easedMaxAbsSampleValue*config.Config.VisualizerScaleSmoothing + maxAbsSampleValue*(1-config.Config.VisualizerScaleSmoothing)
+	usedMaxAbsSampleValue := easedMaxAbsSampleValue / config.Config.VisualizerScale
 
-	for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
-		dist := 0.0
-		if config.Config.VisualizerShowFFT {
-			dist = Y[x] / easedMaxAbsSampleValue
-			dc.LineTo(float64(x), (1-dist)*float64(config.Config.CanvasRenderDimensions.Y))
-		} else {
-			dist = freeMergedSampleBuffer[x*config.Config.VisualizerCumulativeSampleBufferSize/config.Config.CanvasRenderDimensions.X]
-			dc.LineTo(float64(x), (dist/easedMaxAbsSampleValue+1)*float64(config.Config.CanvasRenderDimensions.Y)/2)
-
+	if config.Config.VisualizerShowFFT {
+		for x := 0; x < barCount; x++ {
+			dist := Y[x] / usedMaxAbsSampleValue
+			bar_height := dist * float64(config.Config.CanvasRenderDimensions.Y)
+			dc.DrawRectangle(float64(x*(config.Config.VisualizerFFTBarSpacing+config.Config.VisualizerFFTBarWidth)), float64(config.Config.CanvasRenderDimensions.Y)-bar_height, float64(config.Config.VisualizerFFTBarWidth), bar_height)
+		}
+	} else {
+		for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
+			dist := freeMergedSampleBuffer[x*config.Config.VisualizerCumulativeSampleBufferSize/config.Config.CanvasRenderDimensions.X]
+			dc.LineTo(float64(x), (dist/usedMaxAbsSampleValue+1)*float64(config.Config.CanvasRenderDimensions.Y)/2)
 		}
 	}
-	dc.Stroke()
+	if config.Config.VisualizerShowFFT {
+		dc.Fill()
+	} else {
+		dc.Stroke()
+	}
 	return renderer.RemoveAntiAliasing(im)
 }}

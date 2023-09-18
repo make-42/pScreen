@@ -51,6 +51,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// These keys should exit the program.
 		case "ctrl+c", "q":
 			if config.Config.ModulePersistance {
+				config.ParseConfig()
 				config.Config.LoadedModules = config.ModuleIDsToConfigNames(bridge.BridgeData.LoadedModules)
 				config.SaveConfig()
 			}
