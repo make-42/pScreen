@@ -108,6 +108,7 @@ type config struct {
 	VisualizerCumulativeSampleBufferSize int
 	VisualizerScaleSmoothing             float64 // 0-1
 	VisualizerScale                      float64 // 0-1
+	VisualizerMinScale                   float64
 	VisualizerFFTCutoff                  float64
 	VisualizerFFTBarWidth                int
 	VisualizerFFTBarSpacing              int
@@ -212,6 +213,7 @@ var DefaultConfig = config{
 	VisualizerCumulativeSampleBufferSize: 4096,
 	VisualizerScaleSmoothing:             0.99, // 0-1
 	VisualizerScale:                      0.7,  // 0-1
+	VisualizerMinScale:                   1000000,
 	VisualizerFFTCutoff:                  0.3,
 	VisualizerFFTBarWidth:                4,
 	VisualizerFFTBarSpacing:              1,

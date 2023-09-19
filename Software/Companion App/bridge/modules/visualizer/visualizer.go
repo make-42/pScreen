@@ -120,6 +120,9 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 	}
 
 	easedMaxAbsSampleValue = easedMaxAbsSampleValue*config.Config.VisualizerScaleSmoothing + maxAbsSampleValue*(1-config.Config.VisualizerScaleSmoothing)
+	if easedMaxAbsSampleValue < config.Config.VisualizerMinScale {
+		easedMaxAbsSampleValue = config.Config.VisualizerMinScale
+	}
 	usedMaxAbsSampleValue := easedMaxAbsSampleValue / config.Config.VisualizerScale
 
 	if config.Config.VisualizerShowFFT {
