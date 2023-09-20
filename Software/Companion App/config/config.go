@@ -208,12 +208,12 @@ var DefaultConfig = config{
 	// Visualizer module
 	VisualizerUseMicrophone:              false,
 	VisualizerInputDelayMillis:           0,
-	VisualizerSampleRate:                 44100,
+	VisualizerSampleRate:                 192000,
 	VisualizerSampleBufferSize:           256,
-	VisualizerCumulativeSampleBufferSize: 4096,
+	VisualizerCumulativeSampleBufferSize: 65536,
 	VisualizerScaleSmoothing:             0.99, // 0-1
 	VisualizerScale:                      0.7,  // 0-1
-	VisualizerMinScale:                   1000000,
+	VisualizerMinScale:                   10,
 	VisualizerFFTCutoff:                  0.3,
 	VisualizerFFTBarWidth:                4,
 	VisualizerFFTBarSpacing:              1,

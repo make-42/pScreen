@@ -3,6 +3,7 @@ package visualizer
 import (
 	"image"
 	"math"
+	"math/cmplx"
 	"pscreen/bridge/modules"
 	"pscreen/bridge/renderer"
 	"pscreen/config"
@@ -102,9 +103,27 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 		}
 	}
 
-	var X []complex128
-	if config.Config.VisualizerShowFFT {
-		X = fft.FFTReal(freeMergedSampleBuffer)
+	maxPeriodLength := 0.0
+	maxFreqPhaseFrac := 0.0
+	X := fft.FFTReal(freeMergedSampleBuffer)
+	if !config.Config.VisualizerShowFFT {
+		maxFreq := 0
+		maxFreqAmp := 0.0
+		maxFreqPhase := 0.0
+
+		for i := 0; i < config.Config.VisualizerCumulativeSampleBufferSize/4; i++ {
+			freqAmpCmplx := X[i+config.Config.VisualizerCumulativeSampleBufferSize/2]
+			freqAmp := math.Sqrt(real(cmplx.Conj(freqAmpCmplx) * freqAmpCmplx))
+			if freqAmp > maxFreqAmp {
+				maxFreq = i
+				maxFreqAmp = freqAmp
+				maxFreqPhase = math.Atan(imag(freqAmpCmplx) / real(freqAmpCmplx))
+			}
+		}
+		maxFreqAdjusted := float64(maxFreq) * float64(config.Config.VisualizerSampleRate) / (float64(config.Config.VisualizerCumulativeSampleBufferSize) / 2)
+		maxPeriodLength = float64(config.Config.VisualizerSampleRate) / maxFreqAdjusted
+		maxFreqPhaseFrac = maxFreqPhase / (2 * math.Pi)
+	} else {
 		step := int(math.Round(float64(config.Config.VisualizerCumulativeSampleBufferSize) / float64(barCount) / 4 * float64(config.Config.VisualizerFFTCutoff)))
 		for i := 0; i < barCount; i++ {
 			dist := 0.0
@@ -120,8 +139,10 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 	}
 
 	easedMaxAbsSampleValue = easedMaxAbsSampleValue*config.Config.VisualizerScaleSmoothing + maxAbsSampleValue*(1-config.Config.VisualizerScaleSmoothing)
-	if easedMaxAbsSampleValue < config.Config.VisualizerMinScale {
-		easedMaxAbsSampleValue = config.Config.VisualizerMinScale
+	if config.Config.VisualizerShowFFT {
+		if easedMaxAbsSampleValue < config.Config.VisualizerMinScale {
+			easedMaxAbsSampleValue = config.Config.VisualizerMinScale
+		}
 	}
 	usedMaxAbsSampleValue := easedMaxAbsSampleValue / config.Config.VisualizerScale
 
@@ -132,8 +153,13 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 			dc.DrawRectangle(float64(x*(config.Config.VisualizerFFTBarSpacing+config.Config.VisualizerFFTBarWidth)), float64(config.Config.CanvasRenderDimensions.Y)-bar_height, float64(config.Config.VisualizerFFTBarWidth), bar_height)
 		}
 	} else {
+		offset := int(math.Round(maxPeriodLength * (1 - maxFreqPhaseFrac)))
+		if math.Abs(float64(offset)) > float64(config.Config.VisualizerCumulativeSampleBufferSize) {
+			offset = 0
+		}
+		samplesToShow := int(math.Max(math.Min(math.Round(maxPeriodLength), float64(config.Config.VisualizerCumulativeSampleBufferSize-offset)), float64(config.Config.CanvasRenderDimensions.X)))
 		for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
-			dist := freeMergedSampleBuffer[x*config.Config.VisualizerCumulativeSampleBufferSize/config.Config.CanvasRenderDimensions.X]
+			dist := freeMergedSampleBuffer[x*samplesToShow/config.Config.CanvasRenderDimensions.X+offset]
 			dc.LineTo(float64(x), (dist/usedMaxAbsSampleValue+1)*float64(config.Config.CanvasRenderDimensions.Y)/2)
 		}
 	}
