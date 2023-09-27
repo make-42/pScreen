@@ -108,8 +108,11 @@ type config struct {
 	VisualizerCumulativeSampleBufferSize int
 	VisualizerScaleSmoothing             float64 // 0-1
 	VisualizerScale                      float64 // 0-1
+	VisualizerOscilloscopeScale          float64
 	VisualizerMinScale                   float64
 	VisualizerFFTCutoff                  float64
+	VisualizerFFTScalingBase             float64
+	VisualizerFFTScalingStartValue       float64
 	VisualizerFFTBarWidth                int
 	VisualizerFFTBarSpacing              int
 	VisualizerFFTSmoothing               float64 // 0-1
@@ -209,15 +212,18 @@ var DefaultConfig = config{
 	VisualizerUseMicrophone:              false,
 	VisualizerInputDelayMillis:           0,
 	VisualizerSampleRate:                 192000,
-	VisualizerSampleBufferSize:           256,
-	VisualizerCumulativeSampleBufferSize: 65536,
+	VisualizerSampleBufferSize:           1024,
+	VisualizerCumulativeSampleBufferSize: 32768,
 	VisualizerScaleSmoothing:             0.99, // 0-1
 	VisualizerScale:                      0.7,  // 0-1
+	VisualizerOscilloscopeScale:          4.0,
 	VisualizerMinScale:                   10,
-	VisualizerFFTCutoff:                  0.3,
+	VisualizerFFTCutoff:                  0.014,
+	VisualizerFFTScalingBase:             1.06,
+	VisualizerFFTScalingStartValue:       20.0,
 	VisualizerFFTBarWidth:                4,
 	VisualizerFFTBarSpacing:              1,
-	VisualizerFFTSmoothing:               0.8, // 0-1
+	VisualizerFFTSmoothing:               0.1, // 0-1
 	VisualizerShowFFT:                    true,
 }
 
