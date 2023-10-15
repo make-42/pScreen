@@ -104,12 +104,12 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 	}
 
 	maxPeriodLength := 0.0
-	//maxFreqPhaseFrac := 0.0
+	maxFreqPhaseFrac := 0.0
 	X := fft.FFTReal(freeMergedSampleBuffer)
 	if !config.Config.VisualizerShowFFT {
 		maxFreq := 0
 		maxFreqAmp := 0.0
-		//maxFreqPhase := 0.0
+		maxFreqPhase := 0.0
 
 		for i := 0; i < config.Config.VisualizerCumulativeSampleBufferSize/4; i++ {
 			freqAmpCmplx := X[i+config.Config.VisualizerCumulativeSampleBufferSize/2]
@@ -117,12 +117,12 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 			if freqAmp > maxFreqAmp {
 				maxFreq = i
 				maxFreqAmp = freqAmp
-				//maxFreqPhase = math.Atan(imag(freqAmpCmplx) / real(freqAmpCmplx))
+				maxFreqPhase = math.Atan(imag(freqAmpCmplx) / real(freqAmpCmplx))
 			}
 		}
 		maxFreqAdjusted := float64(maxFreq) * float64(config.Config.VisualizerSampleRate) / (float64(config.Config.VisualizerCumulativeSampleBufferSize) / 2)
 		maxPeriodLength = float64(config.Config.VisualizerSampleRate) / maxFreqAdjusted
-		//maxFreqPhaseFrac = maxFreqPhase / (2 * math.Pi)
+		maxFreqPhaseFrac = maxFreqPhase / (2 * math.Pi)
 	} else {
 		step := float64(config.Config.VisualizerCumulativeSampleBufferSize) / float64(barCount) / 4 * float64(config.Config.VisualizerFFTCutoff)
 		for i := 0; i < barCount; i++ {
@@ -156,8 +156,8 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 			dc.DrawRectangle(float64(x*(config.Config.VisualizerFFTBarSpacing+config.Config.VisualizerFFTBarWidth)), float64(config.Config.CanvasRenderDimensions.Y)-bar_height, float64(config.Config.VisualizerFFTBarWidth), bar_height)
 		}
 	} else {
-		//offsetFFT := maxPeriodLength * (1 - maxFreqPhaseFrac)
-		offsetFromMax := 0
+		offsetFFT := maxPeriodLength * (1 - maxFreqPhaseFrac)
+		/*offsetFromMax := 0
 		offsetMaxAmp := 0.0
 		for x := 0; x < int(maxPeriodLength*1.1); x++ {
 			if freeMergedSampleBuffer[x] > offsetMaxAmp {
@@ -165,9 +165,9 @@ var VisualizerModule modules.Module = modules.Module{RenderFunction: func(im *im
 				offsetMaxAmp = freeMergedSampleBuffer[x]
 			}
 
-		}
+		}*/
 		for x := 0; x < config.Config.CanvasRenderDimensions.X; x++ {
-			index := int(math.Round(math.Min(float64(x)*config.Config.VisualizerOscilloscopeScale+float64(offsetFromMax), float64(config.Config.VisualizerCumulativeSampleBufferSize)-1)))
+			index := int(math.Round(math.Min(float64(x)*config.Config.VisualizerOscilloscopeScale+float64(offsetFFT), float64(config.Config.VisualizerCumulativeSampleBufferSize)-1)))
 			dist := freeMergedSampleBuffer[index]
 			dc.LineTo(float64(x), (dist/usedMaxAbsSampleValue+1)*float64(config.Config.CanvasRenderDimensions.Y)/2)
 		}
