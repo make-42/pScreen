@@ -75,33 +75,34 @@ func UpdateMediaArt(mediaArtURL string) {
 			u, err := url.ParseRequestURI(CurrentMediaArtURL)
 			utils.CheckError(err)
 			imgFile, err := os.Open(u.Path)
-			utils.CheckError(err)
-			defer imgFile.Close()
-			bgImg, _, err := image.Decode(imgFile)
-			utils.CheckError(err)
-			bgTImg := resize.Resize(uint(utils.Min(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
-			bgBImg := resize.Resize(uint(utils.Max(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
-
-			bgBImg = renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10))
-			if !config.Config.RGBXMit {
-				palette := []color.Color{
-					color.Black,
-					color.White,
-				}
-				d := dither.NewDitherer(palette)
-				//d.Mapper = dither.Bayer(2, 2, 1.0)
-				d.Matrix = dither.FloydSteinberg
-				bgBImg = d.Dither(bgBImg)
-				bgTImg = d.Dither(bgTImg)
-			} else {
-				bgTImg = renderer.YCbCrImgToRGBAImg(bgTImg.(*image.YCbCr))
-			}
-
-			tB := bgTImg.Bounds()
-			bB := bgBImg.Bounds()
 			m := image.NewRGBA(image.Rect(0, 0, config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y))
-			draw.Draw(m, bB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-bB.Dx())/2, (config.Config.CanvasRenderDimensions.Y-bB.Dy())/2)), bgBImg.(*image.RGBA), bB.Min, draw.Src)
-			draw.Draw(m, tB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-tB.Dx()), (config.Config.CanvasRenderDimensions.Y-tB.Dy())/2)), bgTImg.(*image.RGBA), tB.Min, draw.Src)
+			if err == nil {
+				defer imgFile.Close()
+				bgImg, _, err := image.Decode(imgFile)
+				utils.CheckError(err)
+				bgTImg := resize.Resize(uint(utils.Min(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+				bgBImg := resize.Resize(uint(utils.Max(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
+
+				bgBImg = renderer.NRGBAImgToRGBAImg(imaging.Blur(bgBImg, 10))
+				if !config.Config.RGBXMit {
+					palette := []color.Color{
+						color.Black,
+						color.White,
+					}
+					d := dither.NewDitherer(palette)
+					//d.Mapper = dither.Bayer(2, 2, 1.0)
+					d.Matrix = dither.FloydSteinberg
+					bgBImg = d.Dither(bgBImg)
+					bgTImg = d.Dither(bgTImg)
+				} else {
+					bgTImg = renderer.YCbCrImgToRGBAImg(bgTImg.(*image.YCbCr))
+				}
+
+				tB := bgTImg.Bounds()
+				bB := bgBImg.Bounds()
+				draw.Draw(m, bB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-bB.Dx())/2, (config.Config.CanvasRenderDimensions.Y-bB.Dy())/2)), bgBImg.(*image.RGBA), bB.Min, draw.Src)
+				draw.Draw(m, tB.Bounds().Add(image.Pt((config.Config.CanvasRenderDimensions.X-tB.Dx()), (config.Config.CanvasRenderDimensions.Y-tB.Dy())/2)), bgTImg.(*image.RGBA), tB.Min, draw.Src)
+			}
 			CurrentMediaArtImage = m
 		}
 	}
