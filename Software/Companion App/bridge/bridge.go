@@ -14,6 +14,7 @@ import (
 	"pscreen/bridge/modules/pong"
 	"pscreen/bridge/modules/qrcode"
 	"pscreen/bridge/modules/screensaver"
+	cube "pscreen/bridge/modules/teapot"
 	"pscreen/bridge/modules/visualizer"
 	"pscreen/bridge/modules/weather"
 	"pscreen/bridge/renderer"
@@ -76,6 +77,7 @@ func BridgeMainThread() {
 			}
 
 		}
+
 		frameBytes := renderer.RenderFrame(ReturnCurrentModule(), BridgeData.LastMod, BridgeData.TimeOfSwitch)
 		if BridgeData.CommsReady {
 			comms.SendBytes(Port, frameBytes)
@@ -115,6 +117,8 @@ func ReturnCurrentModule() modules.Module {
 			return qrcode.QRCodeModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
+		case constants.TeapotModuleID:
+			return cube.TeapotModule
 		case constants.VisualizerModuleID:
 			return visualizer.VisualizerModule
 		case constants.WeatherModuleID:

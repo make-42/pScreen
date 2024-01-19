@@ -1,5 +1,5 @@
 #define FRAMEBUFFER_SIZE 2048
 
-char *get_frame();
+void get_frame(char * frame_buffer_output);
 
 void signal_ready_to_receive_next_frame();

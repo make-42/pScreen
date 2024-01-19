@@ -6,6 +6,8 @@ import (
 
 	"go.bug.st/serial"
 	"go.bug.st/serial/enumerator"
+
+	"github.com/ztrue/tracerr"
 )
 
 var BoardBlocked chan bool = make(chan bool, 10)
@@ -16,7 +18,7 @@ var SerialPortToUse string
 func EnumSerialDevices() []*enumerator.PortDetails {
 	var err error
 	detectedPorts, err := enumerator.GetDetailedPortsList()
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	return detectedPorts
 }
 
@@ -25,14 +27,14 @@ func EstablishComms() serial.Port {
 		BaudRate: config.Config.SerialPortBaudRate,
 	}
 	port, err := serial.Open(SerialPortToUse, mode)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	return port
 }
 
 func WaitForBoardUnblockSignal(port serial.Port) {
 	buff := make([]byte, 1)
 	_, err := port.Read(buff)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	// fmt.Printf("Received %v bytes\n", n)
 	BoardBlocked <- false
 }
@@ -44,7 +46,7 @@ func SendBytes(port serial.Port, bytes []byte) {
 		<-BoardBlocked
 	}
 	_, err := port.Write(bytes)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	// fmt.Printf("Sent %v bytes\n", n)
 	go WaitForBoardUnblockSignal(port)
 }

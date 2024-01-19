@@ -11,6 +11,8 @@ import (
 
 	"git.sr.ht/~sbinet/gg"
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/ztrue/tracerr"
 )
 
 var discordSession *discordgo.Session
@@ -21,7 +23,7 @@ var DiscordModule modules.Module = modules.Module{RenderFunction: func(im *image
 		firstFrame = false
 		var err error
 		discordSession, err = discordgo.New("Bot " + config.Config.DiscordAuthToken)
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		discordSession.StateEnabled = true
 		discordSession.State.TrackChannels = true
 		discordSession.State.TrackMembers = true
@@ -32,7 +34,7 @@ var DiscordModule modules.Module = modules.Module{RenderFunction: func(im *image
 		discordSession.Identify.Intents |= discordgo.IntentGuildMembers
 		// Open a websocket connection to Discord and begin listening.
 		err = discordSession.Open()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 	}
 	dc := gg.NewContextForRGBA(im)
 	dc.SetRGB(0, 0, 0)

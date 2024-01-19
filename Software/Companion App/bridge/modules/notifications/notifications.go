@@ -10,6 +10,8 @@ import (
 
 	"git.sr.ht/~sbinet/gg"
 	"github.com/make-42/go-notifications"
+
+	"github.com/ztrue/tracerr"
 )
 
 type ModuleState struct {
@@ -33,10 +35,10 @@ var CurrentModuleState = ModuleState{
 func ListenForNotifications() {
 	CurrentModuleState.ReceivingNotifications = true
 	notificationReceiver, err := notifications.NewNotificationReceiver(config.Config.NotificationsSystemSendsDoubleNotificationMessages)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	channel := notificationReceiver.GetChannel()
 	for v := range channel {
-		utils.CheckError(v.Error)
+		utils.CheckError(tracerr.Wrap(v.Error))
 		CurrentModuleState.CurrentNotification = v
 		CurrentModuleState.DisplayingNotification = true
 		CurrentModuleState.Inverted = true

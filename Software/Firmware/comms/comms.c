@@ -5,6 +5,7 @@
 #include <sys/types.h>
 
 #define FRAMEBUFFER_SIZE 2048
+#define SECONDS_SCREEN_SLEEP 1
 void get_frame(char * frame_buffer_output) {
   char frame_length_buffer[2];
   int i;

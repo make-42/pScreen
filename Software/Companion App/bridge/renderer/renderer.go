@@ -1,6 +1,7 @@
 package renderer
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
 	"image"
@@ -23,6 +24,11 @@ import (
 	"github.com/makeworld-the-better-one/dither/v2"
 	"github.com/pbnjay/pixfont"
 	"golang.org/x/image/font"
+
+	"github.com/ztrue/tracerr"
+
+	"github.com/make-42/cpu3d/model"
+	threedutils "github.com/make-42/cpu3d/utils"
 )
 
 var SavedFrames int
@@ -32,6 +38,7 @@ var SavedFrames int
 //go:embed assets/img/bg.png
 //go:embed assets/img/DVD_logo.png
 //go:embed assets/gif/komi-san-48.gif
+//go:embed assets/3dmodels/teapot.stl
 var assetsFolder embed.FS
 
 var BigFont font.Face
@@ -43,36 +50,41 @@ var TinyFont font.Face
 var BackgroundImage image.Image
 var DVDLogo image.Image
 var QRCodeModuleGIF *gif.GIF
+var TeapotModel []threedutils.SpaceEdge
 
 func LoadRendererSharedRessources() {
 	var err error
 	BigFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-heavy.ttf", 40)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	MediumFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-heavy.ttf", 30)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	MedSmallFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-heavy.ttf", 24)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	MedSmallerFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-heavy.ttf", 20)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	SmallFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-heavy.ttf", 16) // BegikaFixed.ttf
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	TinyFont, err = gg.LoadFontFaceFromFS(assetsFolder, "assets/fonts/iosevka-medium.ttf", 12) // Lato-Bold.ttf
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	imgFile, err := assetsFolder.Open("assets/img/bg.png")
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	defer imgFile.Close()
 	BackgroundImage, _, err = image.Decode(imgFile)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	dvdImgFile, err := assetsFolder.Open("assets/img/DVD_logo.png")
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	defer dvdImgFile.Close()
 	DVDLogo, _, err = image.Decode(dvdImgFile)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	gifFile, err := assetsFolder.Open("assets/gif/komi-san-48.gif")
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	defer gifFile.Close()
 	QRCodeModuleGIF, err = gif.DecodeAll(gifFile)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
+	teapotModelFile, err := assetsFolder.ReadFile("assets/3dmodels/teapot.stl")
+	r := bytes.NewReader(teapotModelFile)
+	utils.CheckError(tracerr.Wrap(err))
+	TeapotModel = model.ReadSTLFileToEdges(r)
 }
 
 func RenderFrame(mod modules.Module, lastMod modules.Module, timeOfSwitch int64) []byte {
@@ -88,7 +100,6 @@ func RenderFrame(mod modules.Module, lastMod modules.Module, timeOfSwitch int64)
 		im = mod.RenderFunction(im)
 		im = BlurImage(im, easing.Transition(config.Config.TransitionBlurringSigma, 0, easing.QuadEaseInOut((transitionAmount-0.5)*2)))
 	}
-
 	if config.Config.DebugSaveScreen {
 		f, _ := os.Create(fmt.Sprintf("frame-%04d.png", SavedFrames))
 		png.Encode(f, im)

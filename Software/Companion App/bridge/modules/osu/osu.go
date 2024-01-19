@@ -14,6 +14,8 @@ import (
 	"github.com/moutend/go-hook/pkg/keyboard"
 	"github.com/moutend/go-hook/pkg/types"
 	"golang.org/x/exp/slices"
+
+	"github.com/ztrue/tracerr"
 )
 
 var firstFrame = true
@@ -28,7 +30,7 @@ func keyTrackingThread(receptChan chan struct {
 	keyboardChan := make(chan types.KeyboardEvent, 1024)
 
 	err := keyboard.Install(nil, keyboardChan)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 
 	defer keyboard.Uninstall()
 

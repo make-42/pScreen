@@ -128,6 +128,7 @@ int main() {
   for (;;) {
     // Receive screen update
     get_frame(frame_buffer_address);
+
     // Screen draw logic
     u8g2_ClearBuffer(&u8g2);
 
@@ -142,7 +143,6 @@ int main() {
       }
     }
     u8g2_UpdateDisplay(&u8g2);
-
     //  Send unblock command
     signal_ready_to_receive_next_frame();
   }

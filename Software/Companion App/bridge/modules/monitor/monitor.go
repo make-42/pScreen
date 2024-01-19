@@ -11,13 +11,15 @@ import (
 
 	"git.sr.ht/~sbinet/gg"
 	"github.com/shirou/gopsutil/cpu"
+
+	"github.com/ztrue/tracerr"
 )
 
 var MonitorModule modules.Module = modules.Module{RenderFunction: func(im *image.RGBA) *image.RGBA {
 	cpuInfo, err := cpu.Info()
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	cpuPercent, err := cpu.Percent(time.Millisecond*time.Duration(config.Config.CPUUsageSamplingMilliseconds), true)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	dc := gg.NewContextForRGBA(im)
 	dc.SetRGB(0, 0, 0)
 	dc.Clear()

@@ -21,6 +21,8 @@ import (
 	"github.com/leberKleber/go-mpris"
 	"github.com/makeworld-the-better-one/dither/v2"
 	"github.com/nfnt/resize"
+
+	"github.com/ztrue/tracerr"
 )
 
 var CurrentMediaArtURL = ""
@@ -54,10 +56,10 @@ type CurrentPlayingMediaInfo struct {
 
 func ListPlayers() []string {
 	conn, err := dbus.SessionBus()
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	var names []string
 	err = conn.BusObject().Call("org.freedesktop.DBus.ListNames", 0).Store(&names)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 
 	var mprisNames []string
 	for _, name := range names {
@@ -73,13 +75,13 @@ func UpdateMediaArt(mediaArtURL string) {
 		CurrentMediaArtURL = mediaArtURL
 		if CurrentMediaArtURL != "" {
 			u, err := url.ParseRequestURI(CurrentMediaArtURL)
-			utils.CheckError(err)
+			utils.CheckError(tracerr.Wrap(err))
 			imgFile, err := os.Open(u.Path)
 			m := image.NewRGBA(image.Rect(0, 0, config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y))
 			if err == nil {
 				defer imgFile.Close()
 				bgImg, _, err := image.Decode(imgFile)
-				utils.CheckError(err)
+				utils.CheckError(tracerr.Wrap(err))
 				bgTImg := resize.Resize(uint(utils.Min(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
 				bgBImg := resize.Resize(uint(utils.Max(config.Config.CanvasRenderDimensions.X, config.Config.CanvasRenderDimensions.Y)), 0, bgImg, resize.Lanczos3)
 
@@ -116,29 +118,29 @@ func GetCurrentPlayingMediaInfo() CurrentPlayingMediaInfo {
 			return CurrentPlayingMediaInfo{"No media", "", "", 0, 0}
 		}
 		p, err := mpris.NewPlayer(players[0])
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaPositionMicroseconds, err := p.Position()
 		if err != nil {
 			mediaPositionMicroseconds = 0
 		}
 		mediaPosition := float64(mediaPositionMicroseconds) / 1000000
 		mediaMetadata, err := p.Metadata()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaDurationMicroseconds, err := mediaMetadata.MPRISLength()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaDuration := float64(mediaDurationMicroseconds) / 1000000
 		mediaTitle, err := mediaMetadata.XESAMTitle()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaAlbum, err := mediaMetadata.XESAMAlbum()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaArtists, err := mediaMetadata.XESAMArtist()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		mediaArtist := ""
 		if len(mediaArtists) != 0 {
 			mediaArtist = mediaArtists[0]
 		}
 		mediaArtURL, err := mediaMetadata.MPRISArtURL()
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		UpdateMediaArt(mediaArtURL)
 		return CurrentPlayingMediaInfo{mediaTitle, mediaAlbum, mediaArtist, mediaPosition, mediaDuration}
 	default:

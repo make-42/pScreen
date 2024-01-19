@@ -10,6 +10,8 @@ import (
 
 	"git.sr.ht/~sbinet/gg"
 	"github.com/skip2/go-qrcode"
+
+	"github.com/ztrue/tracerr"
 )
 
 var CurrentGIFFrame = 0
@@ -20,7 +22,7 @@ var QRCodeModule modules.Module = modules.Module{RenderFunction: func(im *image.
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
 	qrcodeObj, err := qrcode.New(config.Config.QRCodeContent, qrcode.Highest)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	qrcodeImg := qrcodeObj.Image(-1)
 	qrcodeImgBounds := qrcodeImg.Bounds()
 	offset := image.Pt(4, config.Config.CanvasRenderDimensions.Y/2-qrcodeImgBounds.Dy()/2)

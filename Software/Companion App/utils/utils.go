@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+
+	"github.com/ztrue/tracerr"
 )
 
 func CheckError(err error) {
 	if err != nil {
+		tracerr.PrintSource(err)
 		log.Fatal(err)
 	}
 }

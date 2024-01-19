@@ -13,6 +13,8 @@ import (
 	"time"
 
 	"git.sr.ht/~sbinet/gg"
+
+	"github.com/ztrue/tracerr"
 )
 
 var WeatherModule modules.Module = modules.Module{RenderFunction: func(im *image.RGBA) *image.RGBA {
@@ -116,9 +118,9 @@ type WeatherData struct {
 
 func RequestWeatherData() {
 	res, err := http.Get(fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s", config.Config.Lat, config.Config.Long, config.Config.OpenWeatherMapAPIKey))
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	defer res.Body.Close()
 	decoder := json.NewDecoder(res.Body)
 	err = decoder.Decode(&CurrentWeatherData)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 }

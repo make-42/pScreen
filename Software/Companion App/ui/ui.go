@@ -207,7 +207,6 @@ func (m Model) View() string {
 	// The footer
 	s += "\n" + components.KeybindsHints(keybinds) + "\n"
 	s += "\n" + components.StatsFooter() + "\n"
-
 	// Send the UI for rendering
 	return s
 }

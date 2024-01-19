@@ -11,6 +11,8 @@ import (
 	"pscreen/utils"
 
 	tea "github.com/charmbracelet/bubbletea"
+
+	"github.com/ztrue/tracerr"
 )
 
 func main() {
@@ -26,5 +28,5 @@ func main() {
 	model := ui.InitialModel()
 	p := tea.NewProgram(model)
 	_, err := p.Run()
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 }

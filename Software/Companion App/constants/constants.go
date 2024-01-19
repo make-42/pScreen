@@ -2,7 +2,7 @@ package constants
 
 import "github.com/vishalkuo/bimap"
 
-const AppVersion = "α 0.0.1"
+const AppVersion = "α 0.0.2"
 
 const (
 	ClockModuleID = iota
@@ -15,12 +15,13 @@ const (
 	PongModuleID
 	QRCodeModuleID
 	ScreensaverModuleID
+	TeapotModuleID
 	VisualizerModuleID
 	WeatherModuleID
 )
 
 var AllModules = []int{
-	BlankModuleID, ClockModuleID, DiscordModuleID, DVDModuleID, MediaModuleID, MonitorModuleID, OsuModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, VisualizerModuleID, WeatherModuleID,
+	BlankModuleID, ClockModuleID, DiscordModuleID, DVDModuleID, MediaModuleID, MonitorModuleID, OsuModuleID, PongModuleID, QRCodeModuleID, ScreensaverModuleID, TeapotModuleID, VisualizerModuleID, WeatherModuleID,
 }
 
 var ModuleNames = bimap.NewBiMapFromMap[string, int](map[string]int{
@@ -34,6 +35,7 @@ var ModuleNames = bimap.NewBiMapFromMap[string, int](map[string]int{
 	"pong":        PongModuleID,
 	"qrcode":      QRCodeModuleID,
 	"screensaver": ScreensaverModuleID,
+	"teapot":      TeapotModuleID,
 	"visualizer":  VisualizerModuleID,
 	"weather":     WeatherModuleID,
 })

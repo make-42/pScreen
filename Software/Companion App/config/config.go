@@ -9,6 +9,8 @@ import (
 
 	"github.com/kirsle/configdir"
 	"gopkg.in/yaml.v3"
+
+	"github.com/ztrue/tracerr"
 )
 
 type config struct {
@@ -235,7 +237,7 @@ func ModuleConfigNamesToIDs(moduleNames []string) []int {
 		if x, found := constants.ModuleNames.Get(moduleName); found {
 			IDs = append(IDs, x)
 		} else {
-			utils.CheckError(errors.New("config: unknown module name"))
+			utils.CheckError(tracerr.Wrap(errors.New("config: unknown module name")))
 		}
 	}
 	return IDs
@@ -247,7 +249,7 @@ func ModuleIDsToConfigNames(moduleIDs []int) []string {
 		if x, found := constants.ModuleNames.GetInverse(moduleID); found {
 			moduleNames = append(moduleNames, x)
 		} else {
-			utils.CheckError(errors.New("config: unknown module id"))
+			utils.CheckError(tracerr.Wrap(errors.New("config: unknown module id")))
 		}
 	}
 	return moduleNames
@@ -256,16 +258,16 @@ func ModuleIDsToConfigNames(moduleIDs []int) []string {
 func getConfigPath() string {
 	configPath := configdir.LocalConfig("ontake", "pscreen")
 	configFilePath := filepath.Join(configPath, "config.yml")
-	utils.CheckError(configdir.MakePath(configPath))
+	utils.CheckError(tracerr.Wrap(configdir.MakePath(configPath)))
 	return configFilePath
 }
 
 func SaveConfig() {
 	configFilePath := getConfigPath()
 	outConfig, err := yaml.Marshal(Config)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	err = os.WriteFile(configFilePath, outConfig, 0644)
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 }
 
 func ParseConfig() {
@@ -273,11 +275,11 @@ func ParseConfig() {
 	if _, err := os.Stat(configFilePath); errors.Is(err, os.ErrNotExist) {
 		Config = DefaultConfig
 	} else {
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		inConfig, err := os.ReadFile(configFilePath)
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 		err = yaml.Unmarshal(inConfig, &Config)
-		utils.CheckError(err)
+		utils.CheckError(tracerr.Wrap(err))
 	}
 	SaveConfig()
 }

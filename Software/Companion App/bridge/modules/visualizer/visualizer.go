@@ -13,6 +13,8 @@ import (
 	"git.sr.ht/~sbinet/gg"
 	"github.com/KarpelesLab/static-portaudio/portaudio"
 	"github.com/mjibson/go-dsp/fft"
+
+	"github.com/ztrue/tracerr"
 )
 
 var firstFrame = true
@@ -32,7 +34,7 @@ func initMic() {
 	portaudio.Initialize()
 	var deviceOfInterest *portaudio.DeviceInfo
 	/*devs, err := portaudio.Devices()
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 
 	/*fmt.Println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 	for _, device := range devs {
@@ -47,7 +49,7 @@ func initMic() {
 	} else {
 		deviceOfInterest, err = portaudio.DefaultOutputDevice()
 	}
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	streamParameters := portaudio.StreamParameters{
 		Input: portaudio.StreamDeviceParameters{
 			Device:   deviceOfInterest,
@@ -58,10 +60,10 @@ func initMic() {
 		FramesPerBuffer: config.Config.VisualizerSampleBufferSize,
 	}
 	stream, err = portaudio.OpenStream(streamParameters, monoSampleBufferL, monoSampleBufferR)
-	utils.CheckError(err)
-	utils.CheckError(stream.Start())
+	utils.CheckError(tracerr.Wrap(err))
+	utils.CheckError(tracerr.Wrap(stream.Start()))
 	for {
-		utils.CheckError(stream.Read())
+		utils.CheckError(tracerr.Wrap(stream.Read()))
 		freeSampleBufferL = freeSampleBufferL[config.Config.VisualizerSampleBufferSize:]
 		freeSampleBufferR = freeSampleBufferR[config.Config.VisualizerSampleBufferSize:]
 		freeSampleBufferL = append(freeSampleBufferL, monoSampleBufferL...)

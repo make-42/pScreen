@@ -8,6 +8,8 @@ import (
 
 	"bytes"
 	"compress/zlib"
+
+	"github.com/ztrue/tracerr"
 )
 
 var UncompressedBytesN = -1
@@ -39,9 +41,9 @@ func EncodeFrameToBytes(im *image.RGBA) []byte {
 
 	var b bytes.Buffer
 	w, err := zlib.NewWriterLevel(&b, zlib.BestCompression) // requires no writer if WriteBuffer is used
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	_, err = w.Write([]byte(uncompressedBytes))
-	utils.CheckError(err)
+	utils.CheckError(tracerr.Wrap(err))
 	w.Close()
 	compressedBytes := b.Bytes()
 	outputBytes := make([]byte, 2)
