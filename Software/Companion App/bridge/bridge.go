@@ -15,6 +15,7 @@ import (
 	"pscreen/bridge/modules/qrcode"
 	"pscreen/bridge/modules/screensaver"
 	cube "pscreen/bridge/modules/teapot"
+	"pscreen/bridge/modules/tread"
 	"pscreen/bridge/modules/visualizer"
 	"pscreen/bridge/modules/weather"
 	"pscreen/bridge/renderer"
@@ -117,6 +118,8 @@ func ReturnCurrentModule() modules.Module {
 			return qrcode.QRCodeModule
 		case constants.ScreensaverModuleID:
 			return screensaver.ScreensaverModule
+		case constants.TreadModuleID:
+			return tread.TreadModule
 		case constants.TeapotModuleID:
 			return cube.TeapotModule
 		case constants.VisualizerModuleID:

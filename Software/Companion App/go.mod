@@ -9,6 +9,7 @@ require (
 	github.com/charmbracelet/bubbletea v0.25.0
 	github.com/creasty/go-easing v0.0.0-20161107103139-0cfd96d3a544
 	github.com/disintegration/imaging v1.6.2
+	github.com/fogleman/ease v0.0.0-20170301025033-8da417bf1776
 	github.com/godbus/dbus v4.1.0+incompatible
 	github.com/kirsle/configdir v0.0.0-20170128060238-e45d2f54772f
 	github.com/leberKleber/go-mpris v1.1.0

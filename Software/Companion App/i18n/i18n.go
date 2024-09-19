@@ -14,6 +14,7 @@ type ModuleStrings struct {
 	QRCodeModule      string
 	ScreensaverModule string
 	TeapotModule      string
+	TreadModule       string
 	VisualizerModule  string
 	WeatherModule     string
 }
@@ -42,6 +43,8 @@ func ModuleIDToString(moduleID int) string {
 		return I18n.Modules.ScreensaverModule
 	case constants.TeapotModuleID:
 		return I18n.Modules.TeapotModule
+	case constants.TreadModuleID:
+		return I18n.Modules.TreadModule
 	case constants.VisualizerModuleID:
 		return I18n.Modules.VisualizerModule
 	case constants.WeatherModuleID:
@@ -105,6 +108,7 @@ var en_US = LanguageStrings{
 		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Screensaver",
 		TeapotModule:      "Teapot",
+		TreadModule:       "Tread",
 		VisualizerModule:  "Visualizer",
 		WeatherModule:     "Weather",
 	},
@@ -139,6 +143,7 @@ var fr_FR = LanguageStrings{
 		QRCodeModule:      "QR Code",
 		ScreensaverModule: "Économiseur d'écran",
 		TeapotModule:      "Théière",
+		TreadModule:       "Tread",
 		VisualizerModule:  "Visualisateur",
 		WeatherModule:     "Météo",
 	},
